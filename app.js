@@ -1,6 +1,12 @@
 const express = require("express");
 const app = express();
+const { apiRouter } = require("./routes/api-router");
 
-app.get("/", (req, res) => {
-  res.send("Successful response.");
-});
+app.use(express.json());
+
+//ENDPOINTS
+app.use("/api", apiRouter);
+
+//ERRORS
+
+module.exports = app;
