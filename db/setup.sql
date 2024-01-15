@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS boxl_test;
+CREATE DATABASE boxl_test;
