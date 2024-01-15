@@ -1,0 +1,5 @@
+You are now connected to database "boxl_test" as user "billywhite".
+ league_id | name | admin | created_at | format 
+-----------+------+-------+------------+--------
+(0 rows)
+

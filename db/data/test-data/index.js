@@ -1,2 +1,2 @@
-exports.userData = require("./users.js");
+exports.userData = require("./users");
 exports.leagueData = require("./leagues.js");
