@@ -2,12 +2,14 @@
   "name": "boxl-be",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "listen.js",
   "scripts": {
     "test": "jest",
     "seed": "node ./db/seeds/run-seed.js",
     "setup-dbs": "psql -f ./db/setup.sql",
-    "playground": "psql -f ./playground.sql > playground.txt"
+    "playground": "psql -f ./playground.sql > playground.txt",
+    "start": "node listen.js",
+    "seed-prod": "NODE_ENV=production npm run seed"
   },
   "keywords": [],
   "author": "",
