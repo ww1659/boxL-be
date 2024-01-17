@@ -5,7 +5,7 @@ const seed = ({ userData, leagueData }) => {
   return db
     .query(`DROP TABLE IF EXISTS leagues;`)
     .then(() => {
-      return db.query(`DROP TABLE IF EXISTS users;`);
+      return db.query(`DROP TABLE IF EXISTS users CASCADE;`);
     })
     .then(() => {
       return db.query(`
