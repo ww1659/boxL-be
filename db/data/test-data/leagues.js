@@ -2,13 +2,17 @@ module.exports = [
   {
     name: "CSL",
     admin: 2,
-    created_at: "2024-01-15",
+    start_date: "2024-01-15",
+    end_date: "2024-01-15",
+    location: "whatever",
     format: "round robin",
   },
   {
     name: "Friendly League",
     admin: 1,
-    created_at: "2024-01-16",
+    start_date: "2024-01-15",
+    end_date: "2024-01-11",
+    location: "cheese",
     format: "single elimination",
   },
 ];

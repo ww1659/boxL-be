@@ -1,4 +1,4 @@
-\c boxl_test
+\c boxl
 
 SELECT * 
-FROM leagues;
+FROM results;

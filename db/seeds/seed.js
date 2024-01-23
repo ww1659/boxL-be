@@ -1,11 +1,14 @@
 const format = require("pg-format");
 const db = require("../connection");
 
-const seed = ({ userData, leagueData }) => {
+const seed = ({ userData, leagueData, resultsData }) => {
   return db
-    .query(`DROP TABLE IF EXISTS leagues;`)
+    .query("DROP TABLE IF EXISTS results;")
     .then(() => {
-      return db.query(`DROP TABLE IF EXISTS users CASCADE;`);
+      return db.query(`DROP TABLE IF EXISTS leagues;`);
+    })
+    .then(() => {
+      return db.query(`DROP TABLE IF EXISTS users;`);
     })
     .then(() => {
       return db.query(`
@@ -25,8 +28,32 @@ const seed = ({ userData, leagueData }) => {
             league_id SERIAL PRIMARY KEY, 
             name VARCHAR NOT NULL, 
             admin INT REFERENCES users(user_id) NOT NULL,
-            created_at TIMESTAMP DEFAULT NOW(),
+            start_date DATE,
+            end_date DATE,
+            location VARCHAR NOT NULL,            
             format VARCHAR NOT NULL
+        );`);
+    })
+    .then(() => {
+      return db.query(`
+        CREATE TABLE results (
+            result_id SERIAL PRIMARY KEY,
+            league_id INTEGER NOT NULL REFERENCES leagues(league_id),
+            winner_id INTEGER NOT NULL REFERENCES users(user_id),
+            loser_id INTEGER NOT NULL REFERENCES users(user_id),
+            first_set_score VARCHAR(255) NOT NULL,
+            first_set_tiebreak VARCHAR(255),
+            second_set_score VARCHAR(255) NOT NULL,
+            second_set_tiebreak VARCHAR(255),
+            third_set_score VARCHAR(255),
+            third_set_tiebreak VARCHAR(255),
+            championship_tiebreak BOOLEAN NOT NULL DEFAULT false,
+            championship_tiebreak_score VARCHAR(255),
+            match_date DATE NOT NULL,
+            location VARCHAR(255) NOT NULL,
+            court_number INTEGER NOT NULL,
+            court_surface VARCHAR(50) NOT NULL,
+            match_notes TEXT
         );`);
     })
     .then(() => {
@@ -47,15 +74,62 @@ const seed = ({ userData, leagueData }) => {
     })
     .then(() => {
       const insertLeaguesQueryStr = format(
-        `INSERT INTO leagues (name, admin, created_at, format) VALUES %L;`,
-        leagueData.map(({ name, admin, created_at, format }) => [
-          name,
-          admin,
-          created_at,
-          format,
-        ])
+        `INSERT INTO leagues (name, admin, start_date, end_date, location, format) VALUES %L;`,
+        leagueData.map(
+          ({ name, admin, start_date, end_date, location, format }) => [
+            name,
+            admin,
+            start_date,
+            end_date,
+            location,
+            format,
+          ]
+        )
       );
       return db.query(insertLeaguesQueryStr);
+    })
+    .then(() => {
+      const insertResultsQueryStr = format(
+        `INSERT INTO results (league_id, winner_id, loser_id, first_set_score, first_set_tiebreak, second_set_score, second_set_tiebreak, third_set_score, third_set_tiebreak, championship_tiebreak, championship_tiebreak_score, match_date, location, court_number, court_surface, match_notes) VALUES %L;`,
+        resultsData.map(
+          ({
+            league_id,
+            winner_id,
+            loser_id,
+            first_set_score,
+            first_set_tiebreak,
+            second_set_score,
+            second_set_tiebreak,
+            third_set_score,
+            third_set_tiebreak,
+            championship_tiebreak,
+            championship_tiebreak_score,
+            match_date,
+            location,
+            court_number,
+            court_surface,
+            match_notes,
+          }) => [
+            league_id,
+            winner_id,
+            loser_id,
+            first_set_score,
+            first_set_tiebreak,
+            second_set_score,
+            second_set_tiebreak,
+            third_set_score,
+            third_set_tiebreak,
+            championship_tiebreak,
+            championship_tiebreak_score,
+            match_date,
+            location,
+            court_number,
+            court_surface,
+            match_notes,
+          ]
+        )
+      );
+      return db.query(insertResultsQueryStr);
     });
 };
 
