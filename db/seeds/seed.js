@@ -1,9 +1,12 @@
 const format = require("pg-format");
 const db = require("../connection");
 
-const seed = ({ userData, leagueData, resultsData }) => {
+const seed = ({ userData, leagueData, resultsData, usersLeaguesData }) => {
   return db
     .query("DROP TABLE IF EXISTS results;")
+    .then(() => {
+      return db.query(`DROP TABLE IF EXISTS users_leagues;`);
+    })
     .then(() => {
       return db.query(`DROP TABLE IF EXISTS leagues;`);
     })
@@ -32,6 +35,15 @@ const seed = ({ userData, leagueData, resultsData }) => {
             end_date DATE,
             location VARCHAR NOT NULL,            
             format VARCHAR NOT NULL
+        );`);
+    })
+    .then(() => {
+      return db.query(`
+        CREATE TABLE users_leagues (
+            users_leagues_id SERIAL PRIMARY KEY, 
+            user_id INT REFERENCES users(user_id) NOT NULL,
+            league_id INT REFERENCES leagues(league_id) NOT NULL,
+            CONSTRAINT unique_user_league UNIQUE (user_id, league_id)
         );`);
     })
     .then(() => {
@@ -87,6 +99,13 @@ const seed = ({ userData, leagueData, resultsData }) => {
         )
       );
       return db.query(insertLeaguesQueryStr);
+    })
+    .then(() => {
+      const insertUsersLeaguesQuery = format(
+        `INSERT INTO users_leagues (user_id, league_id) VALUES %L;`,
+        usersLeaguesData.map(({ user_id, league_id }) => [user_id, league_id])
+      );
+      return db.query(insertUsersLeaguesQuery);
     })
     .then(() => {
       const insertResultsQueryStr = format(

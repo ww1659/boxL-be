@@ -31,4 +31,12 @@ module.exports = [
     avatar_url: "",
     club: "Hillside Tennis Association",
   },
+  {
+    username: "peter",
+    name: "peter schmeichel",
+    email: "peter@gmail.com",
+    password_hash: "hashed_password_5",
+    avatar_url: "",
+    club: "Lawn Tennis Association",
+  },
 ];

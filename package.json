@@ -4,7 +4,7 @@
   "description": "",
   "main": "listen.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --watch",
     "seed": "node ./db/seeds/run-seed.js",
     "setup-dbs": "psql -f ./db/setup.sql",
     "playground": "psql -f ./playground.sql > playground.txt",

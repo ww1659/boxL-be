@@ -1,4 +1,3 @@
 \c boxl
 
-SELECT * 
-FROM results;
+SELECT * FROM users_leagues;

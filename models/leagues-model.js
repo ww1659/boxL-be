@@ -5,7 +5,29 @@ exports.fetchLeagues = async () => {
   try {
     const result = await db.query(leaguesQuery);
     return result.rows;
-  } catch (error) {
-    throw error;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.fetchLeaguesByUserId = async (userId) => {
+  const leaguesByUserIdQuery = `
+    SELECT *
+    FROM leagues AS l
+    INNER JOIN users_leagues AS ul ON l.league_id = ul.league_id
+    WHERE ul.user_id = $1;
+    ;`;
+  try {
+    const result = await db.query(leaguesByUserIdQuery, [userId]);
+    if (result.rows.length === 0) {
+      return Promise.reject({
+        status: 200,
+        msg: "user is not in any leagues",
+      });
+    } else {
+      return result.rows;
+    }
+  } catch (err) {
+    throw err;
   }
 };

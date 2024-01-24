@@ -15,6 +15,6 @@ if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
   throw new Error("PGDATABASE not set");
 }
 
-console.log(ENV);
+console.log(ENV, "database");
 
 module.exports = new Pool(config);
