@@ -22,7 +22,8 @@ const seed = ({ userData, leagueData, resultsData, usersLeaguesData }) => {
             email VARCHAR NOT NULL,
             password_hash VARCHAR NOT NULL, 
             avatar_url VARCHAR, 
-            club VARCHAR
+            club VARCHAR,
+            CONSTRAINT unique_username UNIQUE (username)
             );`);
     })
     .then(() => {

@@ -15,4 +15,12 @@ module.exports = [
     location: "cheese",
     format: "single elimination",
   },
+  {
+    name: "Leaguue with no results",
+    admin: 3,
+    start_date: "2022-04-01",
+    end_date: "2024-01-31",
+    location: "gromit",
+    format: "whatever!",
+  },
 ];

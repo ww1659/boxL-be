@@ -14,7 +14,7 @@ describe("GET api/leagues", () => {
   test("GET:200 returns an array of league objects", async () => {
     const response = await request(app).get("/api/leagues").expect(200);
     const leagues = response.body.leagues;
-    expect(leagues.length).toBe(2);
+    expect(leagues.length).toBe(3);
     leagues.forEach((league) => {
       expect(typeof league.league_id).toBe("number");
       expect(typeof league.name).toBe("string");
@@ -64,7 +64,6 @@ describe("GET api/leagues/:userId", () => {
     const response = await request(app).get("/api/leagues/6").expect(404);
     expect(response.body).toEqual({ msg: "user does not exist" });
   });
-
   test("GET:400 returns status 400 for a invalid user id", async () => {
     const response = await request(app).get("/api/leagues/test").expect(400);
     expect(response.body).toEqual({ msg: "invalid id" });
@@ -97,7 +96,13 @@ describe("GET api/results/leagues/:leagueId", () => {
       match_notes: "first match of the spring box league",
     });
   });
-  test("GET:404 returns status 404 for a non-existent league or no results for a league", async () => {
+  test("GET:404 returns status 404 for a non-existent league", async () => {
+    const response = await request(app)
+      .get("/api/results/leagues/4")
+      .expect(404);
+    expect(response.body).toEqual({ msg: "league does not exist" });
+  });
+  test("GET:404 returns status 404 when there are no results for a league", async () => {
     const response = await request(app)
       .get("/api/results/leagues/3")
       .expect(404);
@@ -136,14 +141,78 @@ describe("GET api/results/users/:userId", () => {
       expect(typeof result.match_notes).toBe("string");
     });
   });
-  test("GET:404 returns status 404 for a non-existent user or no results for a user", async () => {
-    const response = await request(app).get("/api/results/users/7").expect(404);
+  test("GET:404 returns status 404 for no results for a user", async () => {
+    const response = await request(app).get("/api/results/users/5").expect(404);
     expect(response.body).toEqual({ msg: "no results for this user" });
+  });
+  test("GET:404 returns status 404 for a non-existent user", async () => {
+    const response = await request(app).get("/api/results/users/7").expect(404);
+    expect(response.body).toEqual({ msg: "user does not exist" });
   });
   test("GET:400 returns status 400 for a invalid user id", async () => {
     const response = await request(app)
       .get("/api/results/users/hello")
       .expect(400);
     expect(response.body).toEqual({ msg: "invalid id" });
+  });
+});
+
+//POST TESTS
+describe.only("POST api/users", () => {
+  test("POST:201 returns status 201 for a successfully created user", async () => {
+    const testUser = {
+      username: "test_username",
+      name: "test user",
+      email: "test_user@gmail.com",
+      password: "test_password",
+      avatar_url: "",
+      club: "test tennis club",
+    };
+    const response = await request(app)
+      .post("/api/users")
+      .send(testUser)
+      .expect(201);
+    expect(response.body.newUser).toEqual({
+      user_id: 6,
+      username: "test_username",
+      name: "test user",
+      email: "test_user@gmail.com",
+      password_hash: expect.any(String),
+      avatar_url: "",
+      club: "test tennis club",
+    });
+    expect(response.body.msg).toBe("new user created");
+  });
+  test("POST:400 returns status 400 for a short password", async () => {
+    const testUser = {
+      username: "test_username",
+      name: "test user",
+      email: "test_user@gmail.com",
+      password: "short",
+      avatar_url: "",
+      club: "test tennis club",
+    };
+    const response = await request(app)
+      .post("/api/users")
+      .send(testUser)
+      .expect(400);
+    expect(response.body.msg).toBe(
+      "password must be at least 8 characters long"
+    );
+  });
+  test("POST:400 returns status 400 and msg for user without username value", async () => {
+    const testUser = {
+      username: "",
+      name: "test user",
+      email: "test_user@gmail.com",
+      password: "passwordFine",
+      avatar_url: "",
+      club: "test tennis club",
+    };
+    const response = await request(app)
+      .post("/api/users")
+      .send(testUser)
+      .expect(400);
+    expect(response.body.msg).toBe("missing user data");
   });
 });

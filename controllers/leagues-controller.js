@@ -22,7 +22,6 @@ exports.getLeaguesByUserId = async (req, res, next) => {
     const user_exists = allUserIds.some(
       (user) => user.user_id === Number(userId)
     );
-
     if (!isNaN(Number(userId)) && !user_exists) {
       res.status(404).send({ msg: "user does not exist" });
     } else {
