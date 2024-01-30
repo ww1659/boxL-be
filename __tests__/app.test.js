@@ -158,7 +158,7 @@ describe("GET api/results/users/:userId", () => {
 });
 
 //POST TESTS
-describe.only("POST api/users", () => {
+describe("POST api/users", () => {
   test("POST:201 returns status 201 for a successfully created user", async () => {
     const testUser = {
       username: "test_username",
