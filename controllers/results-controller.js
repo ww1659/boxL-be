@@ -2,6 +2,7 @@ const { fetchLeagues } = require("../models/leagues-model");
 const {
   fetchResultsByLeagueId,
   fetchResultsByUserId,
+  enterResult,
 } = require("../models/results-model");
 const { fetchUserIds } = require("../models/users-model");
 
@@ -36,6 +37,16 @@ exports.getResultsByUserId = async (req, res, next) => {
       const resultsByUserId = await fetchResultsByUserId(userId);
       res.status(200).send({ resultsByUserId });
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.postNewResult = async (req, res, next) => {
+  try {
+    const newResult = req.body;
+    const enteredResult = await enterResult(newResult);
+    res.status(201).send({ result: enteredResult, msg: "new result entered" });
   } catch (err) {
     next(err);
   }

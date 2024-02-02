@@ -216,3 +216,74 @@ describe("POST api/users", () => {
     expect(response.body.msg).toBe("missing user data");
   });
 });
+
+describe.only("POST api/results", () => {
+  test("POST:201 returns status 201 for a successfully entered result", async () => {
+    const testResult = {
+      league_id: 1,
+      winner_id: 1,
+      loser_id: 2,
+      first_set_score: "7-5",
+      first_set_tiebreak: "",
+      second_set_score: "6-7",
+      second_set_tiebreak: "7-9",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: 1,
+      championship_tiebreak_score: "10-1",
+      match_date: "2024-02-27",
+      location: "cotham park tennis club",
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "test result to be entered",
+    };
+    const response = await request(app)
+      .post("/api/results")
+      .send(testResult)
+      .expect(201);
+    expect(response.body.result).toEqual({
+      result_id: 11,
+      league_id: 1,
+      winner_id: 1,
+      loser_id: 2,
+      first_set_score: "7-5",
+      first_set_tiebreak: "",
+      second_set_score: "6-7",
+      second_set_tiebreak: "7-9",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: true,
+      championship_tiebreak_score: "10-1",
+      match_date: expect.any(String),
+      location: "cotham park tennis club",
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "test result to be entered",
+    });
+    expect(response.body.msg).toBe("new result entered");
+  });
+  test("POST:400 returns status 400 and msg for result without a necessary value", async () => {
+    const testResult = {
+      league_id: 1,
+      loser_id: 2,
+      first_set_score: "7-5",
+      first_set_tiebreak: "",
+      second_set_score: "6-7",
+      second_set_tiebreak: "7-9",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: 1,
+      championship_tiebreak_score: "10-1",
+      match_date: "2024-02-27",
+      location: "cotham park tennis club",
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "test result to be entered",
+    };
+    const response = await request(app)
+      .post("/api/results")
+      .send(testResult)
+      .expect(400);
+    expect(response.body.msg).toBe("missing results data");
+  });
+});
