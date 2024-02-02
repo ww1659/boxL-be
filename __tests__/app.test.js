@@ -177,7 +177,6 @@ describe("POST api/users", () => {
       username: "test_username",
       name: "test user",
       email: "test_user@gmail.com",
-      password_hash: expect.any(String),
       avatar_url: "",
       club: "test tennis club",
     });
@@ -217,7 +216,7 @@ describe("POST api/users", () => {
   });
 });
 
-describe.only("POST api/results", () => {
+describe("POST api/results", () => {
   test("POST:201 returns status 201 for a successfully entered result", async () => {
     const testResult = {
       league_id: 1,

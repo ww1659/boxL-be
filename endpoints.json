@@ -1,0 +1,139 @@
+{
+  "GET /api": {
+    "description": "serves up a json representation of all the available endpoints of the api"
+  },
+  "GET /api/leagues": {
+    "description": "serves an array of all leagues",
+    "queries": [],
+    "exampleResponse": {
+      "leagues": [
+        {
+          "name": "Spring Box League",
+          "admin": 1,
+          "start_date": "2024-02-03",
+          "end_date": "2024-03-15",
+          "location": "cotham park",
+          "format": "round_robin_knockout"
+        }
+      ]
+    }
+  },
+  "GET /api/leagues/:userId": {
+    "description": "serves an array of leagues for a single user",
+    "queries": [],
+    "exampleResponse": {
+      "leagues": [
+        {
+          "name": "Spring Box League",
+          "admin": 1,
+          "start_date": "2024-02-03",
+          "end_date": "2024-03-15",
+          "location": "cotham park",
+          "format": "round_robin_knockout"
+        }
+      ]
+    }
+  },
+  "GET /api/leagues/:leagueId": {
+    "description": "serves a single league for a specific league id",
+    "queries": [],
+    "exampleResponse": {
+      "league": [
+        {
+          "name": "Spring Box League",
+          "admin": 1,
+          "start_date": "2024-02-03",
+          "end_date": "2024-03-15",
+          "location": "cotham park",
+          "format": "round_robin_knockout"
+        }
+      ]
+    }
+  },
+  "GET /api/results/users/:userId": {
+    "description": "serves an array of results for a specific user id",
+    "queries": [],
+    "exampleResponse": {
+      "results": [
+        {
+          "league_id": 1,
+          "winner_id": 1,
+          "loser_id": 2,
+          "first_set_score": "6-4",
+          "first_set_tiebreak": "",
+          "second_set_score": "3-6",
+          "second_set_tiebreak": "",
+          "third_set_score": "",
+          "third_set_tiebreak": "",
+          "championship_tiebreak": 1,
+          "championship_tiebreak_score": "10-8",
+          "match_date": "2024-02-03",
+          "location": "cotham park tennis club",
+          "court_number": 3,
+          "court_surface": "articifical clay",
+          "match_notes": "first match of the spring box league"
+        },
+        {
+          "league_id": 1,
+          "winner_id": 3,
+          "loser_id": 4,
+          "first_set_score": "6-2",
+          "first_set_tiebreak": "",
+          "second_set_score": "4-6",
+          "second_set_tiebreak": "",
+          "third_set_score": "7-5",
+          "third_set_tiebreak": "",
+          "championship_tiebreak": 0,
+          "championship_tiebreak_score": "",
+          "match_date": "2024-02-04",
+          "location": "Cotham Park",
+          "court_number": 2,
+          "court_surface": "artificial clay",
+          "match_notes": "Intense baseline rally battle"
+        }
+      ]
+    }
+  },
+  "POST /api/users": {
+    "description": "adds a new user and responds with that user",
+    "queries": [],
+    "exampleResponse": {
+      "newUser": [
+        {
+          "user_id": 6,
+          "username": "test_username",
+          "name": "test user",
+          "email": "test_user@gmail.com",
+          "avatar_url": "",
+          "club": "test tennis club"
+        }
+      ]
+    }
+  },
+  "POST /api/results": {
+    "description": "adds a new result and responds with that result",
+    "queries": [],
+    "exampleResponse": {
+      "result": [
+        {
+          "league_id": 1,
+          "winner_id": 1,
+          "loser_id": 2,
+          "first_set_score": "6-4",
+          "first_set_tiebreak": "",
+          "second_set_score": "3-6",
+          "second_set_tiebreak": "",
+          "third_set_score": "",
+          "third_set_tiebreak": "",
+          "championship_tiebreak": 1,
+          "championship_tiebreak_score": "10-8",
+          "match_date": "2024-02-03",
+          "location": "cotham park tennis club",
+          "court_number": 3,
+          "court_surface": "articifical clay",
+          "match_notes": "first match of the spring box league"
+        }
+      ]
+    }
+  }
+}

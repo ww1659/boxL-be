@@ -25,7 +25,7 @@ exports.enterUser = async (newUser) => {
   (username, name, email, password_hash, avatar_url, club)
   VALUES
   ($1, $2, $3, $4, $5, $6)
-  RETURNING *
+  RETURNING user_id, username, name, email, avatar_url, club
   ;`;
 
   try {
