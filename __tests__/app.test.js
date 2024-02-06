@@ -286,3 +286,41 @@ describe("POST api/results", () => {
     expect(response.body.msg).toBe("missing results data");
   });
 });
+
+describe.only("POST api/users/login", () => {
+  test("POST:201 returns status 201 for a successfully logged in user", async () => {
+    const testUser = {
+      username: "billy",
+      password: "hashed_password_1",
+    };
+    const response = await request(app)
+      .post("/api/users/login")
+      .send(testUser)
+      .expect(201);
+    expect(response.body.status).toBe(true);
+    expect(response.body.msg).toBe("authentication successful");
+  });
+  test("POST:400 returns status 400 for an incorrect password", async () => {
+    const testUser = {
+      username: "billy",
+      password: "thisPasswordWillFail",
+    };
+    const response = await request(app)
+      .post("/api/users/login")
+      .send(testUser)
+      .expect(400);
+    expect(response.body.status).toBe(false);
+    expect(response.body.msg).toBe("authentication failed: incorrect password");
+  });
+  test("POST:400 returns status 400 for an incorrect username", async () => {
+    const testUser = {
+      username: "notAuser",
+      password: "meaningless",
+    };
+    const response = await request(app)
+      .post("/api/users/login")
+      .send(testUser)
+      .expect(400);
+    expect(response.body.msg).toBe("username does not exist");
+  });
+});

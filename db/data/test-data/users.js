@@ -3,7 +3,8 @@ module.exports = [
     username: "billy",
     name: "billy white",
     email: "testemail@gmail.com",
-    password_hash: "hashed_password_1",
+    password_hash:
+      "$2b$10$l8Eg9f3sgBf/5tt50CxqIebtYSQpkTzZRJoJD6j3wAjW21CBJzvCm",
     avatar_url: "",
     club: "Cotham Park",
   },
@@ -11,7 +12,8 @@ module.exports = [
     username: "ed",
     name: "ed hollis",
     email: "edtest@gmail.com",
-    password_hash: "hashed_password_2",
+    password_hash:
+      "$2b$10$xR8Ls2ITL5J5YyKAIDV.muUcdihHWnkr7oWTZKS4KC/np7ly4GkhC",
     avatar_url: "",
     club: "Cotham Park",
   },
@@ -19,7 +21,8 @@ module.exports = [
     username: "alice",
     name: "Alice Johnson",
     email: "alice@gmail.com",
-    password_hash: "hashed_password_3",
+    password_hash:
+      "$2b$10$V3cxxSKORVx5aSdA13bZZukrEKHg2eWNgCVgH4LNAgYFxFV5Io0Bm",
     avatar_url: "",
     club: "Greenwood Tennis Club",
   },
@@ -27,7 +30,8 @@ module.exports = [
     username: "john",
     name: "John Smith",
     email: "john@gmail.com",
-    password_hash: "hashed_password_4",
+    password_hash:
+      "$2b$10$ot2XbkoKV65MpgDSUtMnA.B/4sys0RGwhBl/dBjh40z67MSKG4Gxe",
     avatar_url: "",
     club: "Hillside Tennis Association",
   },
@@ -35,7 +39,8 @@ module.exports = [
     username: "peter",
     name: "peter schmeichel",
     email: "peter@gmail.com",
-    password_hash: "hashed_password_5",
+    password_hash:
+      "$2b$10$enoLx/xZMxPBxd9rgCFdeeYDBN/3H85Mf0LeksspAGeIBNTjnxhVu",
     avatar_url: "",
     club: "Lawn Tennis Association",
   },

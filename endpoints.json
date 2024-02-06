@@ -34,7 +34,7 @@
       ]
     }
   },
-  "GET /api/leagues/:leagueId": {
+  "GET /api/leagues/leagues/:leagueId": {
     "description": "serves a single league for a specific league id",
     "queries": [],
     "exampleResponse": {
