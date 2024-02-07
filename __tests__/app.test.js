@@ -298,6 +298,14 @@ describe.only("POST api/users/login", () => {
       .send(testUser)
       .expect(201);
     expect(response.body.status).toBe(true);
+    expect(response.body.user).toMatchObject({
+      username: "billy",
+      name: "billy white",
+      email: "testemail@gmail.com",
+      avatar_url: "",
+      club: "Cotham Park",
+    });
+
     expect(response.body.msg).toBe("authentication successful");
   });
   test("POST:400 returns status 400 for an incorrect password", async () => {

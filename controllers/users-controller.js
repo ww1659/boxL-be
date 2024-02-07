@@ -1,4 +1,8 @@
-const { enterUser, getHashedPassword } = require("../models/users-model");
+const {
+  enterUser,
+  getHashedPassword,
+  getUserByUsername,
+} = require("../models/users-model");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -32,14 +36,17 @@ exports.checkUser = async (req, res, next) => {
     const { username, password } = req.body;
 
     //get password from the db
-    const getPassword = await getHashedPassword(username);
-    const hashedPassword = getPassword.password_hash;
+    const userPassword = await getHashedPassword(username);
+    const hashedPassword = userPassword.password_hash;
 
     //compare passwords
     const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);
 
     if (isPasswordCorrect) {
-      res.status(201).send({ status: true, msg: "authentication successful" });
+      const user = await getUserByUsername(username);
+      res
+        .status(201)
+        .send({ status: true, user: user, msg: "authentication successful" });
     } else if (!isPasswordCorrect) {
       res.status(400).send({
         status: false,

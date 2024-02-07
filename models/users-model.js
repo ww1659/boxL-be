@@ -60,3 +60,21 @@ exports.getHashedPassword = async (username) => {
     throw err;
   }
 };
+
+exports.getUserByUsername = async (username) => {
+  const userQuery = `
+  SELECT username, name, email, avatar_url, club
+  FROM users
+  WHERE username = $1
+  ;`;
+
+  try {
+    const result = await db.query(userQuery, [username]);
+    if (result.rows.length === 0) {
+      return Promise.reject({ status: 400, msg: "username does not exist" });
+    }
+    return result.rows[0];
+  } catch (err) {
+    throw err;
+  }
+};
