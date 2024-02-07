@@ -63,7 +63,7 @@ exports.getHashedPassword = async (username) => {
 
 exports.getUserByUsername = async (username) => {
   const userQuery = `
-  SELECT username, name, email, avatar_url, club
+  SELECT user_id, username, name, email, avatar_url, club
   FROM users
   WHERE username = $1
   ;`;

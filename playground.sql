@@ -1,3 +1,4 @@
 \c boxl
 
-SELECT * FROM users_leagues;
+SELECT * FROM users
+WHERE username = 'billy';
