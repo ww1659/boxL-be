@@ -158,6 +158,38 @@ describe("GET api/results/users/:userId", () => {
   });
 });
 
+describe("GET api/clubs/:clubId", () => {
+  test("GET:200 returns a single club for a desired club id", async () => {
+    const response = await request(app).get("/api/clubs/1").expect(200);
+    const club = response.body.club;
+    expect(club[0]).toMatchObject({
+      name: "Cotham Park Tennis Club",
+      address: "80 Redland Road",
+      postcode: "BS66AG",
+      number_of_courts: 4,
+      court_surface: [
+        "macadam",
+        "macadam",
+        "artificial clay",
+        "artificial clay",
+      ],
+      website: "https://clubspark.lta.org.uk/CothamParkTennisClub",
+      image_url:
+        "https://unsplash.com/photos/brown-wooden-surface-with-net-T7RHJ3c6s7Q",
+    });
+  });
+
+  test("GET:200 returns message when user exists but is not a member of a league", async () => {
+    const response = await request(app).get("/api/clubs/5").expect(200);
+    expect(response.body).toEqual({ msg: "club does not exist" });
+  });
+
+  test("GET:400 returns status 400 for a invalid user id", async () => {
+    const response = await request(app).get("/api/clubs/test").expect(400);
+    expect(response.body).toEqual({ msg: "invalid id" });
+  });
+});
+
 //POST TESTS
 describe("POST api/users", () => {
   test("POST:201 returns status 201 for a successfully created user", async () => {

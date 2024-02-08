@@ -94,6 +94,28 @@
       ]
     }
   },
+  "GET /api/clubs/:clubId": {
+    "description": "serves a single club for a specific ID",
+    "queries": [],
+    "exampleResponse": {
+      "club": [
+        {
+          "name": "Cotham Park Tennis Club",
+          "address": "80 Redland Road",
+          "postcode": "BS66AG",
+          "number_of_courts": 4,
+          "court_surface": [
+            "macadam",
+            "macadam",
+            "artificial clay",
+            "artificial clay"
+          ],
+          "website": "https://clubspark.lta.org.uk/CothamParkTennisClub",
+          "image_url": "https://unsplash.com/photos/brown-wooden-surface-with-net-T7RHJ3c6s7Q"
+        }
+      ]
+    }
+  },
   "POST /api/users": {
     "description": "adds a new user and responds with that user",
     "queries": [],
