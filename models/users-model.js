@@ -14,18 +14,18 @@ exports.fetchUserIds = async () => {
 };
 
 exports.enterUser = async (newUser) => {
-  const { username, name, email, password_hash, avatar_url, club } = newUser;
+  const { username, name, email, password_hash, avatar_url, club_id } = newUser;
 
-  if (!username || !name || !email || !password_hash || !club) {
+  if (!username || !name || !email || !password_hash || !club_id) {
     return Promise.reject({ status: 400, msg: "missing user data" });
   }
 
   const postUserQuery = `
   INSERT INTO users
-  (username, name, email, password_hash, avatar_url, club)
+  (username, name, email, password_hash, avatar_url, club_id)
   VALUES
   ($1, $2, $3, $4, $5, $6)
-  RETURNING user_id, username, name, email, avatar_url, club
+  RETURNING user_id, username, name, email, avatar_url, club_id
   ;`;
 
   try {
@@ -35,7 +35,7 @@ exports.enterUser = async (newUser) => {
       email,
       password_hash,
       avatar_url,
-      club,
+      club_id,
     ]);
     return result.rows[0];
   } catch (err) {
@@ -63,7 +63,7 @@ exports.getHashedPassword = async (username) => {
 
 exports.getUserByUsername = async (username) => {
   const userQuery = `
-  SELECT user_id, username, name, email, avatar_url, club
+  SELECT user_id, username, name, email, avatar_url, club_id
   FROM users
   WHERE username = $1
   ;`;

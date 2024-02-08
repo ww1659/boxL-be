@@ -4,7 +4,7 @@ module.exports = [
     admin: 1,
     start_date: "2024-02-03",
     end_date: "2024-03-15",
-    location: "cotham park",
+    club_id: 1,
     format: "round_robin_knockout",
   },
 ];

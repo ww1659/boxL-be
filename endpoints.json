@@ -12,7 +12,7 @@
           "admin": 1,
           "start_date": "2024-02-03",
           "end_date": "2024-03-15",
-          "location": "cotham park",
+          "club_id": 1,
           "format": "round_robin_knockout"
         }
       ]
@@ -28,7 +28,7 @@
           "admin": 1,
           "start_date": "2024-02-03",
           "end_date": "2024-03-15",
-          "location": "cotham park",
+          "club_id": 1,
           "format": "round_robin_knockout"
         }
       ]
@@ -44,7 +44,7 @@
           "admin": 1,
           "start_date": "2024-02-03",
           "end_date": "2024-03-15",
-          "location": "cotham park",
+          "club_id": 1,
           "format": "round_robin_knockout"
         }
       ]
@@ -68,7 +68,7 @@
           "championship_tiebreak": 1,
           "championship_tiebreak_score": "10-8",
           "match_date": "2024-02-03",
-          "location": "cotham park tennis club",
+          "club_id": 1,
           "court_number": 3,
           "court_surface": "articifical clay",
           "match_notes": "first match of the spring box league"
@@ -105,7 +105,7 @@
           "name": "test user",
           "email": "test_user@gmail.com",
           "avatar_url": "",
-          "club": "test tennis club"
+          "club_id": 1
         }
       ]
     }
@@ -134,6 +134,20 @@
           "match_notes": "first match of the spring box league"
         }
       ]
+    }
+  },
+  "POST /api/users/login": {
+    "description": "authenticates valid user",
+    "queries": [],
+    "exampleResponse": {
+      "status": "true",
+      "user": {
+        "username": "billy",
+        "name": "billy white",
+        "email": "testemail@gmail.com",
+        "avatar_url": "",
+        "club_id": 1
+      }
     }
   }
 }

@@ -21,6 +21,7 @@ describe("GET api/leagues", () => {
       expect(typeof league.admin).toBe("number");
       expect(typeof league.start_date).toBe("string");
       expect(typeof league.end_date).toBe("string");
+      expect(typeof league.club_id).toBe("number");
       expect(typeof league.format).toBe("string");
     });
   });
@@ -39,7 +40,7 @@ describe("GET api/leagues/:userId", () => {
       admin: 2,
       start_date: expect.any(String),
       end_date: expect.any(String),
-      location: "whatever",
+      club_id: 1,
       format: "round robin",
     });
   });
@@ -90,7 +91,7 @@ describe("GET api/results/leagues/:leagueId", () => {
       championship_tiebreak: true,
       championship_tiebreak_score: "10-8",
       match_date: expect.any(String),
-      location: "cotham park tennis club",
+      club_id: 1,
       court_number: 3,
       court_surface: "articifical clay",
       match_notes: "first match of the spring box league",
@@ -135,7 +136,7 @@ describe("GET api/results/users/:userId", () => {
       expect(typeof result.championship_tiebreak).toBe("boolean");
       expect(typeof result.championship_tiebreak_score).toBe("string");
       expect(typeof result.match_date).toBe("string");
-      expect(typeof result.location).toBe("string");
+      expect(typeof result.club_id).toBe("number");
       expect(typeof result.court_number).toBe("number");
       expect(typeof result.court_surface).toBe("string");
       expect(typeof result.match_notes).toBe("string");
@@ -166,7 +167,7 @@ describe("POST api/users", () => {
       email: "test_user@gmail.com",
       password: "test_password",
       avatar_url: "",
-      club: "test tennis club",
+      club_id: 1,
     };
     const response = await request(app)
       .post("/api/users")
@@ -178,7 +179,7 @@ describe("POST api/users", () => {
       name: "test user",
       email: "test_user@gmail.com",
       avatar_url: "",
-      club: "test tennis club",
+      club_id: 1,
     });
     expect(response.body.msg).toBe("new user created");
   });
@@ -189,7 +190,7 @@ describe("POST api/users", () => {
       email: "test_user@gmail.com",
       password: "short",
       avatar_url: "",
-      club: "test tennis club",
+      club_id: 1,
     };
     const response = await request(app)
       .post("/api/users")
@@ -206,7 +207,7 @@ describe("POST api/users", () => {
       email: "test_user@gmail.com",
       password: "passwordFine",
       avatar_url: "",
-      club: "test tennis club",
+      club_id: 1,
     };
     const response = await request(app)
       .post("/api/users")
@@ -231,7 +232,7 @@ describe("POST api/results", () => {
       championship_tiebreak: 1,
       championship_tiebreak_score: "10-1",
       match_date: "2024-02-27",
-      location: "cotham park tennis club",
+      club_id: 1,
       court_number: 3,
       court_surface: "articifical clay",
       match_notes: "test result to be entered",
@@ -254,7 +255,7 @@ describe("POST api/results", () => {
       championship_tiebreak: true,
       championship_tiebreak_score: "10-1",
       match_date: expect.any(String),
-      location: "cotham park tennis club",
+      club_id: 1,
       court_number: 3,
       court_surface: "articifical clay",
       match_notes: "test result to be entered",
@@ -287,7 +288,7 @@ describe("POST api/results", () => {
   });
 });
 
-describe.only("POST api/users/login", () => {
+describe("POST api/users/login", () => {
   test("POST:201 returns status 201 for a successfully logged in user", async () => {
     const testUser = {
       username: "billy",
@@ -303,7 +304,7 @@ describe.only("POST api/users/login", () => {
       name: "billy white",
       email: "testemail@gmail.com",
       avatar_url: "",
-      club: "Cotham Park",
+      club_id: 1,
     });
 
     expect(response.body.msg).toBe("authentication successful");

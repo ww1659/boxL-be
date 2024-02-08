@@ -8,7 +8,7 @@ const saltRounds = 10;
 
 exports.createNewUser = async (req, res, next) => {
   try {
-    const { username, name, email, password, avatar_url, club } = req.body;
+    const { username, name, email, password, avatar_url, club_id } = req.body;
     if (password.length < 8) {
       res
         .status(400)
@@ -21,7 +21,7 @@ exports.createNewUser = async (req, res, next) => {
         email,
         password_hash: hashedPassword,
         avatar_url,
-        club,
+        club_id,
       };
       const createdUser = await enterUser(newUser);
       res.status(201).send({ newUser: createdUser, msg: "new user created" });

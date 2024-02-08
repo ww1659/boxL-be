@@ -4,7 +4,7 @@ module.exports = [
     admin: 2,
     start_date: "2024-01-15",
     end_date: "2024-01-15",
-    location: "whatever",
+    club_id: 1,
     format: "round robin",
   },
   {
@@ -12,7 +12,7 @@ module.exports = [
     admin: 1,
     start_date: "2024-01-15",
     end_date: "2024-01-11",
-    location: "cheese",
+    club_id: 1,
     format: "single elimination",
   },
   {
@@ -20,7 +20,7 @@ module.exports = [
     admin: 3,
     start_date: "2022-04-01",
     end_date: "2024-01-31",
-    location: "gromit",
+    club_id: 1,
     format: "whatever!",
   },
 ];

@@ -1,7 +1,13 @@
 const format = require("pg-format");
 const db = require("../connection");
 
-const seed = ({ userData, leagueData, resultsData, usersLeaguesData }) => {
+const seed = ({
+  userData,
+  leagueData,
+  clubData,
+  resultsData,
+  usersLeaguesData,
+}) => {
   return db
     .query("DROP TABLE IF EXISTS results;")
     .then(() => {
@@ -14,6 +20,22 @@ const seed = ({ userData, leagueData, resultsData, usersLeaguesData }) => {
       return db.query(`DROP TABLE IF EXISTS users;`);
     })
     .then(() => {
+      return db.query(`DROP TABLE IF EXISTS clubs;`);
+    })
+    .then(() => {
+      return db.query(`
+        CREATE TABLE clubs (
+            club_id SERIAL PRIMARY KEY, 
+            name VARCHAR NOT NULL, 
+            address VARCHAR NOT NULL,
+            postcode VARCHAR(10) NOT NULL,
+            number_of_courts INT NOT NULL,
+            court_surface VARCHAR(255)[], 
+            website VARCHAR(255),
+            image_url VARCHAR(255)
+        );`);
+    })
+    .then(() => {
       return db.query(`
         CREATE TABLE users (
             user_id SERIAL PRIMARY KEY,
@@ -22,7 +44,7 @@ const seed = ({ userData, leagueData, resultsData, usersLeaguesData }) => {
             email VARCHAR NOT NULL,
             password_hash VARCHAR NOT NULL, 
             avatar_url VARCHAR, 
-            club VARCHAR,
+            club_id INT REFERENCES clubs(club_id),
             CONSTRAINT unique_username UNIQUE (username),
             CONSTRAINT unique_email UNIQUE (email)
             );`);
@@ -35,7 +57,7 @@ const seed = ({ userData, leagueData, resultsData, usersLeaguesData }) => {
             admin INT REFERENCES users(user_id) NOT NULL,
             start_date DATE,
             end_date DATE,
-            location VARCHAR NOT NULL,            
+            club_id INT REFERENCES clubs(club_id) NOT NULL,
             format VARCHAR NOT NULL
         );`);
     })
@@ -64,23 +86,48 @@ const seed = ({ userData, leagueData, resultsData, usersLeaguesData }) => {
             championship_tiebreak BOOLEAN NOT NULL DEFAULT false,
             championship_tiebreak_score VARCHAR(255),
             match_date DATE NOT NULL,
-            location VARCHAR(255) NOT NULL,
+            club_id INT REFERENCES clubs(club_id) NOT NULL,
             court_number INTEGER NOT NULL,
             court_surface VARCHAR(50) NOT NULL,
             match_notes TEXT
         );`);
     })
     .then(() => {
+      const insertCLubsQuery = format(
+        `INSERT INTO clubs (name, address, postcode, number_of_courts, court_surface, website, image_url) VALUES %L;`,
+        clubData.map(
+          ({
+            name,
+            address,
+            postcode,
+            number_of_courts,
+            court_surface,
+            website,
+            image_url,
+          }) => [
+            name,
+            address,
+            postcode,
+            number_of_courts,
+            `{${court_surface.join(",")}}`,
+            website,
+            image_url,
+          ]
+        )
+      );
+      return db.query(insertCLubsQuery);
+    })
+    .then(() => {
       const insertUsersQueryStr = format(
-        `INSERT INTO users (username, name, email, password_hash, avatar_url, club) VALUES %L RETURNING *;`,
+        `INSERT INTO users (username, name, email, password_hash, avatar_url, club_id) VALUES %L RETURNING *;`,
         userData.map(
-          ({ username, name, email, password_hash, avatar_url, club }) => [
+          ({ username, name, email, password_hash, avatar_url, club_id }) => [
             username,
             name,
             email,
             password_hash,
             avatar_url,
-            club,
+            club_id,
           ]
         )
       );
@@ -88,20 +135,21 @@ const seed = ({ userData, leagueData, resultsData, usersLeaguesData }) => {
     })
     .then(() => {
       const insertLeaguesQueryStr = format(
-        `INSERT INTO leagues (name, admin, start_date, end_date, location, format) VALUES %L;`,
+        `INSERT INTO leagues (name, admin, start_date, end_date, club_id, format) VALUES %L;`,
         leagueData.map(
-          ({ name, admin, start_date, end_date, location, format }) => [
+          ({ name, admin, start_date, end_date, club_id, format }) => [
             name,
             admin,
             start_date,
             end_date,
-            location,
+            club_id,
             format,
           ]
         )
       );
       return db.query(insertLeaguesQueryStr);
     })
+
     .then(() => {
       const insertUsersLeaguesQuery = format(
         `INSERT INTO users_leagues (user_id, league_id) VALUES %L;`,
@@ -111,7 +159,7 @@ const seed = ({ userData, leagueData, resultsData, usersLeaguesData }) => {
     })
     .then(() => {
       const insertResultsQueryStr = format(
-        `INSERT INTO results (league_id, winner_id, loser_id, first_set_score, first_set_tiebreak, second_set_score, second_set_tiebreak, third_set_score, third_set_tiebreak, championship_tiebreak, championship_tiebreak_score, match_date, location, court_number, court_surface, match_notes) VALUES %L;`,
+        `INSERT INTO results (league_id, winner_id, loser_id, first_set_score, first_set_tiebreak, second_set_score, second_set_tiebreak, third_set_score, third_set_tiebreak, championship_tiebreak, championship_tiebreak_score, match_date, club_id, court_number, court_surface, match_notes) VALUES %L;`,
         resultsData.map(
           ({
             league_id,
@@ -126,7 +174,7 @@ const seed = ({ userData, leagueData, resultsData, usersLeaguesData }) => {
             championship_tiebreak,
             championship_tiebreak_score,
             match_date,
-            location,
+            club_id,
             court_number,
             court_surface,
             match_notes,
@@ -143,7 +191,7 @@ const seed = ({ userData, leagueData, resultsData, usersLeaguesData }) => {
             championship_tiebreak,
             championship_tiebreak_score,
             match_date,
-            location,
+            club_id,
             court_number,
             court_surface,
             match_notes,

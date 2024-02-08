@@ -1,6 +1,7 @@
 You are now connected to database "boxl" as user "billywhite".
- user_id | username |    name     |        email        |                        password_hash                         | avatar_url |    club     
----------+----------+-------------+---------------------+--------------------------------------------------------------+------------+-------------
-       1 | billy    | billy white | billytest@gmail.com | $2b$10$l8Eg9f3sgBf/5tt50CxqIebtYSQpkTzZRJoJD6j3wAjW21CBJzvCm |            | Cotham Park
-(1 row)
+ club_id |           name            |        address         | postcode | number_of_courts |                     court_surface                     |                      website                      |                               image_url                               
+---------+---------------------------+------------------------+----------+------------------+-------------------------------------------------------+---------------------------------------------------+-----------------------------------------------------------------------
+       1 | Cotham Park Tennis Club   | 80 Redland Road        | BS66AG   |                4 | {macadam,macadam,"artificial clay","artificial clay"} | https://clubspark.lta.org.uk/CothamParkTennisClub | https://unsplash.com/photos/brown-wooden-surface-with-net-T7RHJ3c6s7Q
+       2 | Redland Green Tennis Club | The Redland Green Club | BS67HF   |                7 | {astro,astro,macadam,macadam,macadam,astro,astro}     | https://redlandgreen.co.uk/                       | https://redlandgreen.co.uk/wp-content/uploads/2022/06/aerial_01.jpg
+(2 rows)
 

@@ -56,7 +56,7 @@ exports.enterResult = async (newResult) => {
     championship_tiebreak,
     championship_tiebreak_score,
     match_date,
-    location,
+    club_id,
     court_number,
     court_surface,
     match_notes,
@@ -70,7 +70,7 @@ exports.enterResult = async (newResult) => {
     !second_set_score ||
     !championship_tiebreak ||
     !match_date ||
-    !location ||
+    !club_id ||
     !court_number ||
     !court_surface
   ) {
@@ -79,7 +79,7 @@ exports.enterResult = async (newResult) => {
 
   const postResultQuery = `
   INSERT INTO results
-  (league_id, winner_id, loser_id, first_set_score, first_set_tiebreak, second_set_score, second_set_tiebreak, third_set_score, third_set_tiebreak, championship_tiebreak, championship_tiebreak_score, match_date, location, court_number, court_surface, match_notes)
+  (league_id, winner_id, loser_id, first_set_score, first_set_tiebreak, second_set_score, second_set_tiebreak, third_set_score, third_set_tiebreak, championship_tiebreak, championship_tiebreak_score, match_date, club_id, court_number, court_surface, match_notes)
   VALUES
   ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
   RETURNING *
@@ -99,7 +99,7 @@ exports.enterResult = async (newResult) => {
       championship_tiebreak,
       championship_tiebreak_score,
       match_date,
-      location,
+      club_id,
       court_number,
       court_surface,
       match_notes,
