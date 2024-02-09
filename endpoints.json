@@ -142,6 +142,35 @@
       ]
     }
   },
+  "GET /api/users/leagues/:leagueId": {
+    "description": "serves an array of users for a league id",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "billy",
+          "name": "billy white",
+          "email": "billytest@gmail.com",
+          "avatar_url": "",
+          "club_id": "1"
+        },
+        {
+          "username": "jon",
+          "name": "jon davies",
+          "email": "jontest@gmail.com",
+          "avatar_url": "",
+          "club_id": "1"
+        },
+        {
+          "username": "mae_lord",
+          "name": "maelor james",
+          "email": "maelortest@gmail.com",
+          "avatar_url": "",
+          "club_id": "1"
+        }
+      ]
+    }
+  },
   "POST /api/users": {
     "description": "adds a new user and responds with that user",
     "queries": [],
