@@ -215,6 +215,32 @@ describe("GET api/clubs/:clubId", () => {
   });
 });
 
+describe.only("GET api/users/leagues/:leagueid", () => {
+  test("GET:200 returns array of users for a specific league id", async () => {
+    const response = await request(app).get("/api/users/leagues/1").expect(200);
+    const users = response.body.users;
+    console.log(users);
+    expect(users.length).toBe(4);
+    users.forEach((user) => {
+      expect(typeof user.user_id).toBe("number");
+      expect(typeof user.name).toBe("string");
+      expect(typeof user.email).toBe("string");
+      expect(typeof user.avatar_url).toBe("string");
+      expect(typeof user.club_id).toBe("number");
+    });
+  });
+  test("GET:404 returns status 404 and message for a non-existent league id", async () => {
+    const response = await request(app).get("/api/users/leagues/7").expect(404);
+    expect(response.body).toEqual({ msg: "league does not exist" });
+  });
+  test("GET:400 returns status 400 for an invalid id", async () => {
+    const response = await request(app)
+      .get("/api/users/leagues/oops")
+      .expect(400);
+    expect(response.body).toEqual({ msg: "invalid id" });
+  });
+});
+
 //POST TESTS
 describe("POST api/users", () => {
   test("POST:201 returns status 201 for a successfully created user", async () => {

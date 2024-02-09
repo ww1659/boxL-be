@@ -13,6 +13,25 @@ exports.fetchUserIds = async () => {
   }
 };
 
+exports.fetchUsersByLeagueId = async (leagueId) => {
+  const getUsersQuery = `
+        SELECT u.user_id, u.username, u.name, u.email, u.avatar_url, u.club_id 
+        FROM users u
+        JOIN users_leagues ul ON u.user_id = ul.user_id
+        WHERE ul.league_id = $1
+        ;`;
+  try {
+    const result = await db.query(getUsersQuery, [leagueId]);
+    if (result.rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "league does not exist" });
+    } else {
+      return result.rows;
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
 exports.enterUser = async (newUser) => {
   const { username, name, email, password_hash, avatar_url, club_id } = newUser;
 

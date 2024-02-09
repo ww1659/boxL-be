@@ -2,6 +2,7 @@ const {
   enterUser,
   getHashedPassword,
   getUserByUsername,
+  fetchUsersByLeagueId,
 } = require("../models/users-model");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -53,6 +54,16 @@ exports.checkUser = async (req, res, next) => {
         msg: "authentication failed: incorrect password",
       });
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getUsersByLeagueId = async (req, res, next) => {
+  try {
+    const { leagueId } = req.params;
+    const users = await fetchUsersByLeagueId(leagueId);
+    res.status(200).send({ users });
   } catch (err) {
     next(err);
   }
