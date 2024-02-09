@@ -18,7 +18,7 @@
       ]
     }
   },
-  "GET /api/leagues/:userId": {
+  "GET /api/leagues/users/:userId": {
     "description": "serves an array of leagues for a single user",
     "queries": [],
     "exampleResponse": {
@@ -34,11 +34,11 @@
       ]
     }
   },
-  "GET /api/leagues/leagues/:leagueId": {
-    "description": "serves a single league for a specific league id",
+  "GET /api/leagues/:leagueId": {
+    "description": "serves a league for a single league Id",
     "queries": [],
     "exampleResponse": {
-      "league": [
+      "leagues": [
         {
           "name": "Spring Box League",
           "admin": 1,
@@ -46,6 +46,32 @@
           "end_date": "2024-03-15",
           "club_id": 1,
           "format": "round_robin_knockout"
+        }
+      ]
+    }
+  },
+  "GET /api/results/leagues/:leagueId": {
+    "description": "serves a single league for a specific league id",
+    "queries": [],
+    "exampleResponse": {
+      "results": [
+        {
+          "league_id": 1,
+          "winner_id": 1,
+          "loser_id": 2,
+          "first_set_score": "6-4",
+          "first_set_tiebreak": "",
+          "second_set_score": "3-6",
+          "second_set_tiebreak": "",
+          "third_set_score": "",
+          "third_set_tiebreak": "",
+          "championship_tiebreak": true,
+          "championship_tiebreak_score": "10-8",
+          "match_date": "2024-02-03",
+          "club_id": 1,
+          "court_number": 3,
+          "court_surface": "articifical clay",
+          "match_notes": "first match of the spring box league"
         }
       ]
     }

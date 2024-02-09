@@ -1,7 +1,6 @@
 You are now connected to database "boxl" as user "billywhite".
- club_id |           name            |        address         | postcode | number_of_courts |                     court_surface                     |                      website                      |                               image_url                               
----------+---------------------------+------------------------+----------+------------------+-------------------------------------------------------+---------------------------------------------------+-----------------------------------------------------------------------
-       1 | Cotham Park Tennis Club   | 80 Redland Road        | BS66AG   |                4 | {macadam,macadam,"artificial clay","artificial clay"} | https://clubspark.lta.org.uk/CothamParkTennisClub | https://unsplash.com/photos/brown-wooden-surface-with-net-T7RHJ3c6s7Q
-       2 | Redland Green Tennis Club | The Redland Green Club | BS67HF   |                7 | {astro,astro,macadam,macadam,macadam,astro,astro}     | https://redlandgreen.co.uk/                       | https://redlandgreen.co.uk/wp-content/uploads/2022/06/aerial_01.jpg
-(2 rows)
+ league_id |    league_name    | member_count 
+-----------+-------------------+--------------
+         1 | Spring Box League |            1
+(1 row)
 

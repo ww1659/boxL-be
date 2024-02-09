@@ -2,6 +2,7 @@ const leagues = require("../db/data/test-data/leagues");
 const {
   fetchLeagues,
   fetchLeaguesByUserId,
+  fetchLeagueByLeagueId,
 } = require("../models/leagues-model");
 const { fetchUserIds } = require("../models/users-model");
 
@@ -28,6 +29,17 @@ exports.getLeaguesByUserId = async (req, res, next) => {
       const leaguesByUserId = await fetchLeaguesByUserId(userId);
       res.status(200).send({ leaguesByUserId });
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getLeagueByLeagueId = async (req, res, next) => {
+  const { leagueId } = req.params;
+
+  try {
+    const leagueByLeagueId = await fetchLeagueByLeagueId(leagueId);
+    res.status(200).send({ league: leagueByLeagueId });
   } catch (err) {
     next(err);
   }

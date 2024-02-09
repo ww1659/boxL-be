@@ -31,9 +31,9 @@ describe("GET api/leagues", () => {
   });
 });
 
-describe("GET api/leagues/:userId", () => {
+describe("GET api/leagues/users/:userId", () => {
   test("GET:200 returns a single league for a desired user id", async () => {
-    const response = await request(app).get("/api/leagues/1").expect(200);
+    const response = await request(app).get("/api/leagues/users/1").expect(200);
     const leagues = response.body.leaguesByUserId;
     expect(leagues[0]).toMatchObject({
       name: "CSL",
@@ -45,7 +45,7 @@ describe("GET api/leagues/:userId", () => {
     });
   });
   test("GET:200 returns an array of leagues for a desired user id", async () => {
-    const response = await request(app).get("/api/leagues/3").expect(200);
+    const response = await request(app).get("/api/leagues/users/3").expect(200);
     const leagues = response.body.leaguesByUserId;
     expect(leagues.length).toBe(2);
     leagues.forEach((league) => {
@@ -58,12 +58,37 @@ describe("GET api/leagues/:userId", () => {
     });
   });
   test("GET:200 returns message when user exists but is not a member of a league", async () => {
-    const response = await request(app).get("/api/leagues/5").expect(200);
+    const response = await request(app).get("/api/leagues/users/5").expect(200);
     expect(response.body).toEqual({ msg: "user is not in any leagues" });
   });
   test("GET:404 returns status 404 for a non-existent user", async () => {
-    const response = await request(app).get("/api/leagues/6").expect(404);
+    const response = await request(app).get("/api/leagues/users/6").expect(404);
     expect(response.body).toEqual({ msg: "user does not exist" });
+  });
+  test("GET:400 returns status 400 for a invalid user id", async () => {
+    const response = await request(app)
+      .get("/api/leagues/users/test")
+      .expect(400);
+    expect(response.body).toEqual({ msg: "invalid id" });
+  });
+});
+
+describe("GET api/leagues/:leagueId", () => {
+  test("GET:200 returns a single league for a desired league id", async () => {
+    const response = await request(app).get("/api/leagues/1").expect(200);
+    const league = response.body.league;
+    expect(league[0]).toMatchObject({
+      name: "CSL",
+      admin: 2,
+      start_date: expect.any(String),
+      end_date: expect.any(String),
+      club_id: 1,
+      format: "round robin",
+    });
+  });
+  test("GET:404 returns status 404 for a non-existent league", async () => {
+    const response = await request(app).get("/api/leagues/6").expect(404);
+    expect(response.body).toEqual({ msg: "league does not exist" });
   });
   test("GET:400 returns status 400 for a invalid user id", async () => {
     const response = await request(app).get("/api/leagues/test").expect(400);
