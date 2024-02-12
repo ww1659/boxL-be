@@ -109,12 +109,12 @@ describe("GET api/results/leagues/:leagueId", () => {
       loser_id: 2,
       first_set_score: "6-4",
       first_set_tiebreak: "",
-      second_set_score: "3-6",
+      second_set_score: "6-3",
       second_set_tiebreak: "",
       third_set_score: "",
       third_set_tiebreak: "",
-      championship_tiebreak: true,
-      championship_tiebreak_score: "10-8",
+      championship_tiebreak: false,
+      championship_tiebreak_score: "",
       match_date: expect.any(String),
       club_id: 1,
       court_number: 3,
@@ -146,7 +146,7 @@ describe("GET api/results/users/:userId", () => {
   test("GET:200 returns an array of results for a desired user", async () => {
     const response = await request(app).get("/api/results/users/1").expect(200);
     const results = response.body.resultsByUserId;
-    expect(results.length).toBe(5);
+    expect(results.length).toBe(3);
     results.forEach((result) => {
       expect(typeof result.result_id).toBe("number");
       expect(typeof result.league_id).toBe("number");
@@ -215,7 +215,7 @@ describe("GET api/clubs/:clubId", () => {
   });
 });
 
-describe.only("GET api/users/leagues/:leagueid", () => {
+describe("GET api/users/leagues/:leagueid", () => {
   test("GET:200 returns array of users for a specific league id", async () => {
     const response = await request(app).get("/api/users/leagues/1").expect(200);
     const users = response.body.users;
@@ -236,6 +236,40 @@ describe.only("GET api/users/leagues/:leagueid", () => {
   test("GET:400 returns status 400 for an invalid id", async () => {
     const response = await request(app)
       .get("/api/users/leagues/oops")
+      .expect(400);
+    expect(response.body).toEqual({ msg: "invalid id" });
+  });
+});
+
+describe("GET api/leagues/:leagueId/standings", () => {
+  test("GET:200 returns an array of standings for a desired league id", async () => {
+    const response = await request(app)
+      .get("/api/leagues/1/standings")
+      .expect(200);
+    const standings = response.body.standings;
+    expect(standings.length).toBe(4);
+    standings.forEach((standing) => {
+      expect(typeof standing.standing_id).toBe("number");
+      expect(typeof standing.standing_id).toBe("number");
+      expect(typeof standing.group_name).toBe("string");
+      expect(typeof standing.player_id).toBe("number");
+      expect(typeof standing.matches_played).toBe("number");
+      expect(typeof standing.wins).toBe("number");
+      expect(typeof standing.sets_won).toBe("number");
+      expect(typeof standing.sets_lost).toBe("number");
+      expect(typeof standing.games_won).toBe("number");
+      expect(typeof standing.games_lost).toBe("number");
+    });
+  });
+  test("GET:404 returns status 404 for a non-existent league", async () => {
+    const response = await request(app)
+      .get("/api/leagues/6/standings")
+      .expect(404);
+    expect(response.body).toEqual({ msg: "league does not exist" });
+  });
+  test("GET:400 returns status 400 for a invalid user id", async () => {
+    const response = await request(app)
+      .get("/api/leagues/test/standings")
       .expect(400);
     expect(response.body).toEqual({ msg: "invalid id" });
   });

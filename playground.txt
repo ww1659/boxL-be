@@ -1,6 +1,15 @@
 You are now connected to database "boxl" as user "billywhite".
- league_id |    league_name    | member_count 
------------+-------------------+--------------
-         1 | Spring Box League |            1
-(1 row)
+ standing_id | league_id | group_name | player_id | matches_played | wins | sets_won | sets_lost | games_won | games_lost 
+-------------+-----------+------------+-----------+----------------+------+----------+-----------+-----------+------------
+           1 |         1 | A          |         1 |              2 |    2 |        4 |         2 |        36 |         33
+           2 |         1 | A          |         2 |              2 |    1 |        2 |         2 |        20 |         22
+           3 |         1 | A          |         3 |              2 |    3 |        6 |         2 |        36 |         32
+           4 |         1 | A          |         4 |              2 |    1 |        2 |         3 |        25 |         27
+           5 |         1 | A          |         5 |              1 |    2 |        4 |         1 |        30 |         27
+           6 |         1 | A          |         6 |              1 |    2 |        4 |         2 |        33 |         34
+           7 |         1 | A          |         7 |              1 |    1 |        2 |         2 |        20 |         22
+           8 |         1 | A          |         8 |              1 |    0 |        1 |         2 |        16 |         20
+           9 |         1 | A          |         9 |              1 |    0 |        1 |         2 |        14 |         22
+          10 |         1 | A          |        10 |              1 |    1 |        2 |         3 |        26 |         28
+(10 rows)
 

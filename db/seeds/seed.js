@@ -7,9 +7,13 @@ const seed = ({
   clubData,
   resultsData,
   usersLeaguesData,
+  standingsData,
 }) => {
   return db
     .query("DROP TABLE IF EXISTS results;")
+    .then(() => {
+      return db.query(`DROP TABLE IF EXISTS standings;`);
+    })
     .then(() => {
       return db.query(`DROP TABLE IF EXISTS users_leagues;`);
     })
@@ -68,6 +72,22 @@ const seed = ({
             user_id INT REFERENCES users(user_id) NOT NULL,
             league_id INT REFERENCES leagues(league_id) NOT NULL,
             CONSTRAINT unique_user_league UNIQUE (user_id, league_id)
+        );`);
+    })
+    .then(() => {
+      return db.query(`
+        CREATE TABLE standings (
+            standing_id SERIAL PRIMARY KEY,
+            league_id INT REFERENCES leagues(league_id) NOT NULL,
+            group_name VARCHAR(255) NOT NULL,
+            player_id INT REFERENCES users(user_id) NOT NULL,
+            matches_played INT NOT NULL,
+            wins INT NOT NULL,
+            sets_won INT NOT NULL,
+            sets_lost INT NOT NULL,
+            games_won INT NOT NULL,
+            games_lost INT NOT NULL,
+            CONSTRAINT unique_player_group UNIQUE (league_id, group_name, player_id)
         );`);
     })
     .then(() => {
@@ -149,13 +169,41 @@ const seed = ({
       );
       return db.query(insertLeaguesQueryStr);
     })
-
     .then(() => {
       const insertUsersLeaguesQuery = format(
         `INSERT INTO users_leagues (user_id, league_id) VALUES %L;`,
         usersLeaguesData.map(({ user_id, league_id }) => [user_id, league_id])
       );
       return db.query(insertUsersLeaguesQuery);
+    })
+    .then(() => {
+      const insertStandingsQuery = format(
+        `INSERT INTO standings (league_id, group_name, player_id, matches_played, wins, sets_won, sets_lost, games_won, games_lost) VALUES %L;`,
+        standingsData.map(
+          ({
+            league_id,
+            group_name,
+            player_id,
+            matches_played,
+            wins,
+            sets_won,
+            sets_lost,
+            games_won,
+            games_lost,
+          }) => [
+            league_id,
+            group_name,
+            player_id,
+            matches_played,
+            wins,
+            sets_won,
+            sets_lost,
+            games_won,
+            games_lost,
+          ]
+        )
+      );
+      return db.query(insertStandingsQuery);
     })
     .then(() => {
       const insertResultsQueryStr = format(

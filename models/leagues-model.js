@@ -52,3 +52,24 @@ exports.fetchLeagueByLeagueId = async (leagueId) => {
     throw err;
   }
 };
+
+exports.fetchStandingsByLeagueId = async (leagueId) => {
+  const standings = `
+      SELECT *
+      FROM standings
+      WHERE league_id = $1;
+      ;`;
+  try {
+    const result = await db.query(standings, [leagueId]);
+    if (result.rows.length === 0) {
+      return Promise.reject({
+        status: 404,
+        msg: "league does not exist",
+      });
+    } else {
+      return result.rows;
+    }
+  } catch (err) {
+    throw err;
+  }
+};
