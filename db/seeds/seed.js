@@ -97,6 +97,7 @@ const seed = ({
             league_id INTEGER NOT NULL REFERENCES leagues(league_id),
             winner_id INTEGER NOT NULL REFERENCES users(user_id),
             loser_id INTEGER NOT NULL REFERENCES users(user_id),
+            group_name VARCHAR(20) NOT NULL,
             first_set_score VARCHAR(255) NOT NULL,
             first_set_tiebreak VARCHAR(255),
             second_set_score VARCHAR(255) NOT NULL,
@@ -207,12 +208,13 @@ const seed = ({
     })
     .then(() => {
       const insertResultsQueryStr = format(
-        `INSERT INTO results (league_id, winner_id, loser_id, first_set_score, first_set_tiebreak, second_set_score, second_set_tiebreak, third_set_score, third_set_tiebreak, championship_tiebreak, championship_tiebreak_score, match_date, club_id, court_number, court_surface, match_notes) VALUES %L;`,
+        `INSERT INTO results (league_id, winner_id, loser_id, group_name, first_set_score, first_set_tiebreak, second_set_score, second_set_tiebreak, third_set_score, third_set_tiebreak, championship_tiebreak, championship_tiebreak_score, match_date, club_id, court_number, court_surface, match_notes) VALUES %L;`,
         resultsData.map(
           ({
             league_id,
             winner_id,
             loser_id,
+            group_name,
             first_set_score,
             first_set_tiebreak,
             second_set_score,
@@ -230,6 +232,7 @@ const seed = ({
             league_id,
             winner_id,
             loser_id,
+            group_name,
             first_set_score,
             first_set_tiebreak,
             second_set_score,
