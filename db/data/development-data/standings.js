@@ -56,7 +56,7 @@ module.exports = [
   },
   {
     league_id: 1,
-    group_name: "A",
+    group_name: "B",
     player_id: 6,
     matches_played: 1,
     wins: 2,
@@ -67,7 +67,7 @@ module.exports = [
   },
   {
     league_id: 1,
-    group_name: "A",
+    group_name: "B",
     player_id: 7,
     matches_played: 1,
     wins: 1,
@@ -78,7 +78,7 @@ module.exports = [
   },
   {
     league_id: 1,
-    group_name: "A",
+    group_name: "B",
     player_id: 8,
     matches_played: 1,
     wins: 0,
@@ -89,7 +89,7 @@ module.exports = [
   },
   {
     league_id: 1,
-    group_name: "A",
+    group_name: "B",
     player_id: 9,
     matches_played: 1,
     wins: 0,
@@ -100,7 +100,7 @@ module.exports = [
   },
   {
     league_id: 1,
-    group_name: "A",
+    group_name: "B",
     player_id: 10,
     matches_played: 1,
     wins: 1,
