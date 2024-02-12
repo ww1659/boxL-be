@@ -120,6 +120,8 @@ describe("GET api/results/leagues/:leagueId", () => {
       court_number: 3,
       court_surface: "articifical clay",
       match_notes: "first match of the spring box league",
+      winner_name: "billy white",
+      loser_name: "ed hollis",
     });
   });
   test("GET:404 returns status 404 for a non-existent league", async () => {

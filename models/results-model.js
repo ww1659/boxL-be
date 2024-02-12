@@ -2,9 +2,11 @@ const db = require("../db/connection");
 
 exports.fetchResultsByLeagueId = async (leagueId) => {
   const getResultsByLeagueQuery = `
-  SELECT * 
-  FROM results 
-  WHERE league_id = $1
+    SELECT r.*, u1.name AS winner_name, u2.name AS loser_name
+    FROM results r
+    JOIN users u1 ON r.winner_id = u1.user_id
+    JOIN users u2 ON r.loser_id = u2.user_id
+    WHERE league_id = $1
   ;`;
   try {
     const result = await db.query(getResultsByLeagueQuery, [leagueId]);
