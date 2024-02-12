@@ -7,6 +7,7 @@ exports.fetchResultsByLeagueId = async (leagueId) => {
     JOIN users u1 ON r.winner_id = u1.user_id
     JOIN users u2 ON r.loser_id = u2.user_id
     WHERE league_id = $1
+    ORDER BY r.match_date DESC; 
   ;`;
   try {
     const result = await db.query(getResultsByLeagueQuery, [leagueId]);

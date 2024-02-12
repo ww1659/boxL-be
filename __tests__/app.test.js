@@ -105,23 +105,23 @@ describe("GET api/results/leagues/:leagueId", () => {
     expect(results.length).toBe(7);
     expect(results[0]).toMatchObject({
       league_id: 1,
-      winner_id: 1,
-      loser_id: 2,
-      first_set_score: "6-4",
+      winner_id: 2,
+      loser_id: 4,
+      first_set_score: "6-3",
       first_set_tiebreak: "",
-      second_set_score: "6-3",
-      second_set_tiebreak: "",
+      second_set_score: "7-6",
+      second_set_tiebreak: "7-5",
       third_set_score: "",
       third_set_tiebreak: "",
       championship_tiebreak: false,
       championship_tiebreak_score: "",
       match_date: expect.any(String),
       club_id: 1,
-      court_number: 3,
-      court_surface: "articifical clay",
-      match_notes: "first match of the spring box league",
-      winner_name: "billy white",
-      loser_name: "ed hollis",
+      court_number: 1,
+      court_surface: "macadam",
+      match_notes: "Thrilling second set tiebreak",
+      winner_name: "ed hollis",
+      loser_name: "John Smith",
     });
   });
   test("GET:404 returns status 404 for a non-existent league", async () => {
