@@ -55,10 +55,12 @@ exports.fetchLeagueByLeagueId = async (leagueId) => {
 
 exports.fetchStandingsByLeagueId = async (leagueId) => {
   const standings = `
-      SELECT *
-      FROM standings
+      SELECT s.*, u.name AS player_name
+      FROM standings s
+      JOIN users u ON s.player_id = u.user_id
       WHERE league_id = $1;
       ;`;
+
   try {
     const result = await db.query(standings, [leagueId]);
     if (result.rows.length === 0) {

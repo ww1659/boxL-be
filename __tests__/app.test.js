@@ -248,8 +248,8 @@ describe("GET api/leagues/:leagueId/standings", () => {
       .expect(200);
     const standings = response.body.standings;
     expect(standings.length).toBe(4);
+    console.log(standings);
     standings.forEach((standing) => {
-      expect(typeof standing.standing_id).toBe("number");
       expect(typeof standing.standing_id).toBe("number");
       expect(typeof standing.group_name).toBe("string");
       expect(typeof standing.player_id).toBe("number");
@@ -259,6 +259,7 @@ describe("GET api/leagues/:leagueId/standings", () => {
       expect(typeof standing.sets_lost).toBe("number");
       expect(typeof standing.games_won).toBe("number");
       expect(typeof standing.games_lost).toBe("number");
+      expect(typeof standing.player_name).toBe("string");
     });
   });
   test("GET:404 returns status 404 for a non-existent league", async () => {
