@@ -455,3 +455,34 @@ describe("POST api/users/login", () => {
     expect(response.body.msg).toBe("username does not exist");
   });
 });
+
+//PATCH TESTS
+describe.only("PATCH api/standings", () => {
+  test("PATCH:201? updates the standings table when a result is entered", async () => {
+    const testResult = {
+      league_id: 1,
+      winner_id: 1,
+      loser_id: 2,
+      group_name: "A",
+      first_set_score: "6-0",
+      first_set_tiebreak: "",
+      second_set_score: "6-0",
+      second_set_tiebreak: "",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: 0,
+      championship_tiebreak_score: "",
+      match_date: "2024-03-29",
+      club_id: 1,
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "This is a test result for a patch. Double Bagel btw",
+    };
+    const response = await request(app)
+      .patch("/api/standings")
+      .send(testResult)
+      .expect(201);
+    console.log(response, "TEST FILE");
+    expect(response.body.msg).toBe("missing results data");
+  });
+});
