@@ -457,8 +457,8 @@ describe("POST api/users/login", () => {
 });
 
 //PATCH TESTS
-describe.only("PATCH api/standings", () => {
-  test("PATCH:201? updates the standings table when a result is entered", async () => {
+describe("PATCH api/standings", () => {
+  test("PATCH:200 updates the standings table when a result is entered", async () => {
     const testResult = {
       league_id: 1,
       winner_id: 1,
@@ -481,8 +481,318 @@ describe.only("PATCH api/standings", () => {
     const response = await request(app)
       .patch("/api/standings")
       .send(testResult)
-      .expect(201);
-    console.log(response, "TEST FILE");
-    expect(response.body.msg).toBe("missing results data");
+      .expect(200);
+    expect(response.body.msg).toBe("standings updated successfully");
+    expect(response.body.updatedStandings).toMatchObject([
+      {
+        standing_id: 1,
+        league_id: 1,
+        group_name: "A",
+        player_id: 1,
+        matches_played: 4,
+        wins: 4,
+        sets_won: 8,
+        sets_lost: 1,
+        games_won: 49,
+        games_lost: 24,
+      },
+      {
+        standing_id: 2,
+        league_id: 1,
+        group_name: "A",
+        player_id: 2,
+        matches_played: 5,
+        wins: 2,
+        sets_won: 5,
+        sets_lost: 6,
+        games_won: 36,
+        games_lost: 57,
+      },
+    ]);
+  });
+  test("PATCH:200 updates the standings table when a result with a third set score is entered", async () => {
+    const testResult = {
+      league_id: 1,
+      winner_id: 1,
+      loser_id: 2,
+      group_name: "A",
+      first_set_score: "6-0",
+      first_set_tiebreak: "",
+      second_set_score: "1-6",
+      second_set_tiebreak: "",
+      third_set_score: "6-3",
+      third_set_tiebreak: "",
+      championship_tiebreak: 0,
+      championship_tiebreak_score: "",
+      match_date: "2024-03-29",
+      club_id: 1,
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "This is a test result for a patch. Double Bagel btw",
+    };
+    const response = await request(app)
+      .patch("/api/standings")
+      .send(testResult)
+      .expect(200);
+    expect(response.body.msg).toBe("standings updated successfully");
+    expect(response.body.updatedStandings).toMatchObject([
+      {
+        standing_id: 1,
+        league_id: 1,
+        group_name: "A",
+        player_id: 1,
+        matches_played: 4,
+        wins: 4,
+        sets_won: 8,
+        sets_lost: 2,
+        games_won: 50,
+        games_lost: 33,
+      },
+      {
+        standing_id: 2,
+        league_id: 1,
+        group_name: "A",
+        player_id: 2,
+        matches_played: 5,
+        wins: 2,
+        sets_won: 6,
+        sets_lost: 6,
+        games_won: 45,
+        games_lost: 58,
+      },
+    ]);
+  });
+  test("PATCH:200 updates the standings table when a result with a championship tiebreak is entered", async () => {
+    const testResult = {
+      league_id: 1,
+      winner_id: 1,
+      loser_id: 2,
+      group_name: "A",
+      first_set_score: "6-0",
+      first_set_tiebreak: "",
+      second_set_score: "6-7",
+      second_set_tiebreak: "",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: 1,
+      championship_tiebreak_score: "10-8",
+      match_date: "2024-03-29",
+      club_id: 1,
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "This is a test result for a patch. Double Bagel btw",
+    };
+    const response = await request(app)
+      .patch("/api/standings")
+      .send(testResult)
+      .expect(200);
+    expect(response.body.msg).toBe("standings updated successfully");
+    expect(response.body.updatedStandings).toMatchObject([
+      {
+        standing_id: 1,
+        league_id: 1,
+        group_name: "A",
+        player_id: 1,
+        matches_played: 4,
+        wins: 4,
+        sets_won: 8,
+        sets_lost: 2,
+        games_won: 49,
+        games_lost: 31,
+      },
+      {
+        standing_id: 2,
+        league_id: 1,
+        group_name: "A",
+        player_id: 2,
+        matches_played: 5,
+        wins: 2,
+        sets_won: 6,
+        sets_lost: 6,
+        games_won: 43,
+        games_lost: 57,
+      },
+    ]);
+  });
+  test("PATCH:400 returns an error message when the first set score isn't valid", async () => {
+    const testResult = {
+      league_id: 1,
+      winner_id: 1,
+      loser_id: 2,
+      group_name: "A",
+      first_set_score: "6-6",
+      first_set_tiebreak: "",
+      second_set_score: "6-0",
+      second_set_tiebreak: "",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: 0,
+      championship_tiebreak_score: "",
+      match_date: "2024-03-29",
+      club_id: 1,
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "This is a test result for a patch. Double Bagel btw",
+    };
+    const response = await request(app)
+      .patch("/api/standings")
+      .send(testResult)
+      .expect(400);
+    expect(response.body.msg).toBe("first set score invalid");
+  });
+  test("PATCH:400 returns an error message when the second set score isn't valid", async () => {
+    const testResult = {
+      league_id: 1,
+      winner_id: 1,
+      loser_id: 2,
+      group_name: "A",
+      first_set_score: "6-7",
+      first_set_tiebreak: "",
+      second_set_score: "10-0",
+      second_set_tiebreak: "",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: 0,
+      championship_tiebreak_score: "",
+      match_date: "2024-03-29",
+      club_id: 1,
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "This is a test result for a patch. Double Bagel btw",
+    };
+    const response = await request(app)
+      .patch("/api/standings")
+      .send(testResult)
+      .expect(400);
+    expect(response.body.msg).toBe("second set score invalid");
+  });
+  test("PATCH:400 returns an error message when the third set score isn't valid", async () => {
+    const testResult = {
+      league_id: 1,
+      winner_id: 1,
+      loser_id: 2,
+      group_name: "A",
+      first_set_score: "6-7",
+      first_set_tiebreak: "",
+      second_set_score: "7-6",
+      second_set_tiebreak: "",
+      third_set_score: "10-0",
+      third_set_tiebreak: "",
+      championship_tiebreak: 0,
+      championship_tiebreak_score: "",
+      match_date: "2024-03-29",
+      club_id: 1,
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "This is a test result for a patch. Double Bagel btw",
+    };
+    const response = await request(app)
+      .patch("/api/standings")
+      .send(testResult)
+      .expect(400);
+    expect(response.body.msg).toBe("third set score invalid");
+  });
+  test("PATCH:400 returns an error message when the championship tiebreak score isn't valid", async () => {
+    const testResult = {
+      league_id: 1,
+      winner_id: 1,
+      loser_id: 2,
+      group_name: "A",
+      first_set_score: "6-7",
+      first_set_tiebreak: "",
+      second_set_score: "7-6",
+      second_set_tiebreak: "",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: 1,
+      championship_tiebreak_score: "10-9",
+      match_date: "2024-03-29",
+      club_id: 1,
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "This is a test result for a patch. Double Bagel btw",
+    };
+    const response = await request(app)
+      .patch("/api/standings")
+      .send(testResult)
+      .expect(400);
+    expect(response.body.msg).toBe("champs tiebreak score invalid");
+  });
+  test("PATCH:400 returns an error message when the wrong data type is entered as a value", async () => {
+    const testResult = {
+      league_id: "test",
+      winner_id: 1,
+      loser_id: 2,
+      group_name: "A",
+      first_set_score: "6-0",
+      first_set_tiebreak: "",
+      second_set_score: "6-0",
+      second_set_tiebreak: "",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: 0,
+      championship_tiebreak_score: "",
+      match_date: "2024-03-29",
+      club_id: 1,
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "This is a test result for a patch. Double Bagel btw",
+    };
+    const response = await request(app)
+      .patch("/api/standings")
+      .send(testResult)
+      .expect(400);
+    expect(response.body.msg).toBe("invalid id");
+  });
+  test("PATCH:400 returns an error message when a third set score isn't provided if needed", async () => {
+    const testResult = {
+      league_id: 1,
+      winner_id: 1,
+      loser_id: 2,
+      group_name: "A",
+      first_set_score: "6-0",
+      first_set_tiebreak: "",
+      second_set_score: "0-6",
+      second_set_tiebreak: "",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: 0,
+      championship_tiebreak_score: "",
+      match_date: "2024-03-29",
+      club_id: 1,
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "This is a test result for a patch. Double Bagel btw",
+    };
+    const response = await request(app)
+      .patch("/api/standings")
+      .send(testResult)
+      .expect(400);
+    expect(response.body.msg).toBe("missing standings data");
+  });
+  test("PATCH:400 returns status 400 and msg for result without a necessary value", async () => {
+    const testResult = {
+      winner_id: 1,
+      loser_id: 2,
+      group_name: "A",
+      first_set_score: "6-0",
+      first_set_tiebreak: "",
+      second_set_score: "6-0",
+      second_set_tiebreak: "",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: 0,
+      championship_tiebreak_score: "",
+      match_date: "2024-03-29",
+      club_id: 1,
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "This is a test result for a patch. Double Bagel btw",
+    };
+    const response = await request(app)
+      .patch("/api/standings")
+      .send(testResult)
+      .expect(400);
+    expect(response.body.msg).toBe("missing standings data");
   });
 });
