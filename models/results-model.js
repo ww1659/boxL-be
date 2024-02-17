@@ -1,4 +1,8 @@
 const db = require("../db/connection");
+const {
+  validateChampsTiebreak,
+} = require("../utils/validateChampsTiebreakScore");
+const { validateScore } = require("../utils/validateSetScore");
 
 exports.fetchResultsByLeagueId = async (leagueId) => {
   const getResultsByLeagueQuery = `
@@ -77,8 +81,6 @@ exports.enterResult = async (newResult) => {
 
   // variables
   let thirdSetRequired = true;
-  let winnerSetsWon = 0;
-  let loserSetsWon = 0;
 
   //calculate games won
   const winnerGames1 = first_set_score.split("-")[0];
@@ -87,7 +89,7 @@ exports.enterResult = async (newResult) => {
   const loserGames2 = second_set_score.split("-")[1];
 
   //decide if third set is required
-  if (winnerGames1 > loserGames2 && winnerGames2 > loserGames2) {
+  if (winnerGames1 > loserGames1 && winnerGames2 > loserGames2) {
     thirdSetRequired = false;
   }
 

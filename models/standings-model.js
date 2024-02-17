@@ -41,7 +41,7 @@ exports.updateStandings = async (newResult) => {
   const loserGames2 = second_set_score.split("-")[1];
 
   //decide if third set is required
-  if (winnerGames1 > loserGames2 && winnerGames2 > loserGames2) {
+  if (winnerGames1 > loserGames1 && winnerGames2 > loserGames2) {
     thirdSetRequired = false;
   }
 
