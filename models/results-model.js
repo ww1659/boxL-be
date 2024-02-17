@@ -66,6 +66,58 @@ exports.enterResult = async (newResult) => {
     match_notes,
   } = newResult;
 
+  //validates first and second set scores
+  if (validateScore(first_set_score) === false) {
+    return Promise.reject({ status: 400, msg: "first set score invalid" });
+  }
+
+  if (validateScore(second_set_score) === false) {
+    return Promise.reject({ status: 400, msg: "second set score invalid" });
+  }
+
+  // variables
+  let thirdSetRequired = true;
+  let winnerSetsWon = 0;
+  let loserSetsWon = 0;
+
+  //calculate games won
+  const winnerGames1 = first_set_score.split("-")[0];
+  const loserGames1 = first_set_score.split("-")[1];
+  const winnerGames2 = second_set_score.split("-")[0];
+  const loserGames2 = second_set_score.split("-")[1];
+
+  //decide if third set is required
+  if (winnerGames1 > loserGames2 && winnerGames2 > loserGames2) {
+    thirdSetRequired = false;
+  }
+
+  //checks if third set or championship tiebreaks are valid scores
+  if (thirdSetRequired) {
+    if (championship_tiebreak) {
+      if (
+        championship_tiebreak_score !== "" &&
+        validateChampsTiebreak(championship_tiebreak_score) === false
+      ) {
+        return Promise.reject({
+          status: 400,
+          msg: "champs tiebreak score invalid",
+        });
+      }
+    } else if (
+      third_set_score !== "" &&
+      validateScore(third_set_score) === false
+    ) {
+      return Promise.reject({
+        status: 400,
+        msg: "third set score invalid",
+      });
+    }
+  }
+
+  //calculate third set games won
+  const winnerGames3 = third_set_score ? third_set_score.split("-")[0] : 0;
+  const loserGames3 = third_set_score ? third_set_score.split("-")[1] : 0;
+
   if (
     !league_id ||
     !winner_id ||
@@ -73,7 +125,7 @@ exports.enterResult = async (newResult) => {
     !group_name ||
     !first_set_score ||
     !second_set_score ||
-    !championship_tiebreak ||
+    (thirdSetRequired && !third_set_score && !championship_tiebreak_score) ||
     !match_date ||
     !club_id ||
     !court_number ||
