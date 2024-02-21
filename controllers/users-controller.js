@@ -3,6 +3,7 @@ const {
   getHashedPassword,
   getUserByUsername,
   fetchUsersByLeagueId,
+  fetchUserById,
 } = require("../models/users-model");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -27,6 +28,16 @@ exports.createNewUser = async (req, res, next) => {
       const createdUser = await enterUser(newUser);
       res.status(201).send({ newUser: createdUser, msg: "new user created" });
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getUserById = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const user = await fetchUserById(userId);
+    res.status(200).send({ user });
   } catch (err) {
     next(err);
   }

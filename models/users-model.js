@@ -13,6 +13,24 @@ exports.fetchUserIds = async () => {
   }
 };
 
+exports.fetchUserById = async (userId) => {
+  const getUserQuery = `
+        SELECT u.user_id, u.username, u.name, u.email, u.avatar_url, u.club_id 
+        FROM users u
+        WHERE u.user_id = $1
+        ;`;
+  try {
+    const result = await db.query(getUserQuery, [userId]);
+    if (result.rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "user does not exist" });
+    } else {
+      return result.rows;
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
 exports.fetchUsersByLeagueId = async (leagueId) => {
   const getUsersQuery = `
         SELECT u.user_id, u.username, u.name, u.email, u.avatar_url, u.club_id 

@@ -31,6 +31,28 @@ describe("GET api/leagues", () => {
   });
 });
 
+describe("GET api/users/:userId", () => {
+  test("GET:200 returns a single user for a desired user id", async () => {
+    const response = await request(app).get("/api/users/1").expect(200);
+    const user = response.body.user;
+    expect(user[0]).toMatchObject({
+      username: "billy",
+      name: "billy white",
+      email: "testemail@gmail.com",
+      avatar_url: "",
+      club_id: 1,
+    });
+  });
+  test("GET:404 returns status 404 for a non-existent user", async () => {
+    const response = await request(app).get("/api/users/6").expect(404);
+    expect(response.body).toEqual({ msg: "user does not exist" });
+  });
+  test("GET:400 returns status 400 for a invalid user id", async () => {
+    const response = await request(app).get("/api/users/test").expect(400);
+    expect(response.body).toEqual({ msg: "invalid id" });
+  });
+});
+
 describe("GET api/leagues/users/:userId", () => {
   test("GET:200 returns a single league for a desired user id", async () => {
     const response = await request(app).get("/api/leagues/users/1").expect(200);
