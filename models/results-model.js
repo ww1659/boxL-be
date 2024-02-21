@@ -28,11 +28,13 @@ exports.fetchResultsByLeagueId = async (leagueId) => {
   }
 };
 
+//could do with paginating
 exports.fetchResultsByUserId = async (userId) => {
   const getResultsByUserQuery = `
     SELECT * 
     FROM results 
     WHERE winner_id = $1 OR loser_id = $1
+    ORDER BY match_date ASC;
   ;`;
   try {
     const result = await db.query(getResultsByUserQuery, [userId]);
