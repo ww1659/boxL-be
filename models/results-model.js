@@ -34,7 +34,7 @@ exports.fetchResultsByUserId = async (userId) => {
     SELECT * 
     FROM results 
     WHERE winner_id = $1 OR loser_id = $1
-    ORDER BY match_date ASC;
+    ORDER BY match_date DESC;
   ;`;
   try {
     const result = await db.query(getResultsByUserQuery, [userId]);
