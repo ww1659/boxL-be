@@ -1,6 +1,6 @@
 module.exports = [
   {
-    username: "billy",
+    username: "sheriff",
     name: "billy white",
     email: "billytest@gmail.com",
     password_hash:
@@ -9,7 +9,7 @@ module.exports = [
     club_id: 1,
   },
   {
-    username: "jon",
+    username: "the_tennis_man",
     name: "jon davies",
     email: "jontest@gmail.com",
     password_hash:
@@ -18,7 +18,7 @@ module.exports = [
     club_id: 1,
   },
   {
-    username: "mae_lord",
+    username: "stag_daddy",
     name: "maelor james",
     email: "maelortest@gmail.com",
     password_hash:
@@ -36,7 +36,7 @@ module.exports = [
     club_id: 1,
   },
   {
-    username: "dad_strength",
+    username: "dad_wrists",
     name: "luke turner",
     email: "luketest@gmail.com",
     password_hash:
@@ -54,7 +54,7 @@ module.exports = [
     club_id: 1,
   },
   {
-    username: "henry",
+    username: "barman",
     name: "henry mcfarlane",
     email: "henrytest@gmail.com",
     password_hash:
@@ -63,7 +63,7 @@ module.exports = [
     club_id: 1,
   },
   {
-    username: "will",
+    username: "terminator",
     name: "will may",
     email: "willtest@gmail.com",
     password_hash:
@@ -72,7 +72,7 @@ module.exports = [
     club_id: 1,
   },
   {
-    username: "matt",
+    username: "northener",
     name: "matt laird",
     email: "matttest@gmail.com",
     password_hash:
@@ -81,7 +81,7 @@ module.exports = [
     club_id: 1,
   },
   {
-    username: "keir",
+    username: "rockstar",
     name: "keir krishnamma-hillier",
     email: "keirtest@gmail.com",
     password_hash:
