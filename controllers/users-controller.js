@@ -6,6 +6,7 @@ const {
   fetchUserById,
 } = require("../models/users-model");
 const bcrypt = require("bcrypt");
+const { signJWT, verifyJWT } = require("../utils/jwt");
 const saltRounds = 10;
 
 exports.createNewUser = async (req, res, next) => {
@@ -43,28 +44,44 @@ exports.getUserById = async (req, res, next) => {
   }
 };
 
-exports.checkUser = async (req, res, next) => {
+exports.createUserSession = async (req, res, next) => {
   try {
     const { username, password } = req.body;
+    const user = await getUserByUsername(username);
 
-    //get password from the db
-    const userPassword = await getHashedPassword(username);
-    const hashedPassword = userPassword.password_hash;
+    //get hashed_password
+    const hashedPassword = user.password_hash;
 
     //compare passwords
     const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);
 
-    if (isPasswordCorrect) {
-      const user = await getUserByUsername(username);
-      res
-        .status(201)
-        .send({ status: true, user: user, msg: "authentication successful" });
-    } else if (!isPasswordCorrect) {
-      res.status(400).send({
-        status: false,
-        msg: "authentication failed: incorrect password",
-      });
+    if (!user || !isPasswordCorrect) {
+      return res.status(401).send({ msg: "invalid username or password" });
     }
+
+    const payload = {
+      user_id: user.user_id,
+      username: user.username,
+      name: user.name,
+      email: user.email,
+      avatar_url: user.avatar_url,
+      club_id: user.club_id,
+    };
+
+    //create access token
+    const accessToken = signJWT(payload, "1h");
+
+    //set access token in cookie
+    res.cookie("accessToken", accessToken, { maxAge: 300000, httpOnly: true });
+
+    //verify token
+    const verification = verifyJWT(accessToken);
+
+    return res.status(201).send({
+      status: "success",
+      token: accessToken,
+      data: verification.payload,
+    });
   } catch (err) {
     next(err);
   }

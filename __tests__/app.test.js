@@ -442,18 +442,19 @@ describe("POST api/users/login", () => {
       .post("/api/users/login")
       .send(testUser)
       .expect(201);
-    expect(response.body.status).toBe(true);
-    expect(response.body.user).toMatchObject({
+    expect(response.body.status).toBe("success");
+    expect(response.body.data).toMatchObject({
+      user_id: 1,
       username: "billy",
       name: "billy white",
       email: "testemail@gmail.com",
       avatar_url: "",
       club_id: 1,
+      iat: expect.any(Number),
+      exp: expect.any(Number),
     });
-
-    expect(response.body.msg).toBe("authentication successful");
   });
-  test("POST:400 returns status 400 for an incorrect password", async () => {
+  test("POST:401 returns status 401 for an incorrect password", async () => {
     const testUser = {
       username: "billy",
       password: "thisPasswordWillFail",
@@ -461,11 +462,10 @@ describe("POST api/users/login", () => {
     const response = await request(app)
       .post("/api/users/login")
       .send(testUser)
-      .expect(400);
-    expect(response.body.status).toBe(false);
-    expect(response.body.msg).toBe("authentication failed: incorrect password");
+      .expect(401);
+    expect(response.body.msg).toBe("invalid username or password");
   });
-  test("POST:400 returns status 400 for an incorrect username", async () => {
+  test("POST:401 returns status 401 for an incorrect username", async () => {
     const testUser = {
       username: "notAuser",
       password: "meaningless",
@@ -473,8 +473,8 @@ describe("POST api/users/login", () => {
     const response = await request(app)
       .post("/api/users/login")
       .send(testUser)
-      .expect(400);
-    expect(response.body.msg).toBe("username does not exist");
+      .expect(401);
+    expect(response.body.msg).toBe("invalid username or password");
   });
 });
 

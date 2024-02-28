@@ -100,7 +100,7 @@ exports.getHashedPassword = async (username) => {
 
 exports.getUserByUsername = async (username) => {
   const userQuery = `
-  SELECT user_id, username, name, email, avatar_url, club_id
+  SELECT *
   FROM users
   WHERE username = $1
   ;`;
@@ -108,7 +108,10 @@ exports.getUserByUsername = async (username) => {
   try {
     const result = await db.query(userQuery, [username]);
     if (result.rows.length === 0) {
-      return Promise.reject({ status: 400, msg: "username does not exist" });
+      return Promise.reject({
+        status: 401,
+        msg: "invalid username or password",
+      });
     }
     return result.rows[0];
   } catch (err) {
