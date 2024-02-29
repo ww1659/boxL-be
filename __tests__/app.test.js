@@ -3,6 +3,75 @@ const request = require("supertest");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index");
+const { signJWT } = require("../utils/jwt");
+
+const generateAccessToken = (userId) => {
+  switch (userId) {
+    case 1:
+      payload = {
+        userId: 1,
+        username: "billy",
+        name: "billy white",
+        email: "testemail@gmail.com",
+        avatar_url: "",
+        club: 1,
+      };
+      break;
+    case 2:
+      payload = {
+        userId: 2,
+        username: "ed",
+        name: "ed hollis",
+        email: "edtest@gmail.com",
+        avatar_url: "",
+        club: 2,
+      };
+      break;
+    case 3:
+      payload = {
+        userId: 3,
+        username: "alice",
+        name: "Alice Johnson",
+        email: "alice@gmail.com",
+        avatar_url: "",
+        club: 1,
+      };
+      break;
+    case 4:
+      payload = {
+        userId: 4,
+        username: "john",
+        name: "John Smith",
+        email: "john@gmail.com",
+        avatar_url: "",
+        club: 1,
+      };
+      break;
+    case 5:
+      payload = {
+        userId: 5,
+        username: "peter",
+        name: "peter schmeichel",
+        email: "peter@gmail.com",
+        avatar_url: "",
+        club: 1,
+      };
+
+      break;
+    default:
+      payload = {
+        userId: userId,
+        username: "",
+        name: "",
+        email: "",
+        avatar_url: "",
+        club: "",
+      };
+      break;
+  }
+  const accessToken = signJWT(payload, "1h");
+  return accessToken;
+};
 
 beforeEach(() => {
   return seed(data);
@@ -53,9 +122,14 @@ describe("GET api/users/:userId", () => {
   });
 });
 
+// JWT VERIFICATION BOOM
 describe("GET api/leagues/users/:userId", () => {
   test("GET:200 returns a single league for a desired user id", async () => {
-    const response = await request(app).get("/api/leagues/users/1").expect(200);
+    const accessToken = generateAccessToken(1);
+    const response = await request(app)
+      .get("/api/leagues/users/1")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(200);
     const leagues = response.body.leaguesByUserId;
     expect(leagues[0]).toMatchObject({
       name: "CSL",
@@ -67,7 +141,11 @@ describe("GET api/leagues/users/:userId", () => {
     });
   });
   test("GET:200 returns an array of leagues for a desired user id", async () => {
-    const response = await request(app).get("/api/leagues/users/3").expect(200);
+    const accessToken = generateAccessToken(3);
+    const response = await request(app)
+      .get("/api/leagues/users/3")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(200);
     const leagues = response.body.leaguesByUserId;
     expect(leagues.length).toBe(2);
     leagues.forEach((league) => {
@@ -80,16 +158,26 @@ describe("GET api/leagues/users/:userId", () => {
     });
   });
   test("GET:200 returns message when user exists but is not a member of a league", async () => {
-    const response = await request(app).get("/api/leagues/users/5").expect(200);
+    const accessToken = generateAccessToken(5);
+    const response = await request(app)
+      .get("/api/leagues/users/5")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(200);
     expect(response.body).toEqual({ msg: "user is not in any leagues" });
   });
   test("GET:404 returns status 404 for a non-existent user", async () => {
-    const response = await request(app).get("/api/leagues/users/6").expect(404);
+    const accessToken = generateAccessToken(6);
+    const response = await request(app)
+      .get("/api/leagues/users/6")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(404);
     expect(response.body).toEqual({ msg: "user does not exist" });
   });
   test("GET:400 returns status 400 for a invalid user id", async () => {
+    const accessToken = generateAccessToken("test");
     const response = await request(app)
       .get("/api/leagues/users/test")
+      .set("Authorization", `Bearer ${accessToken}`)
       .expect(400);
     expect(response.body).toEqual({ msg: "invalid id" });
   });

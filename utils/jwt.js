@@ -5,11 +5,15 @@ require("dotenv").config({
 
 //sign JWT
 exports.signJWT = (payload, expiresIn) => {
-  const privateKey = process.env.TOKEN_PRIVATE;
-  return jwt.sign(payload, privateKey, {
-    algorithm: "RS256",
-    expiresIn,
-  });
+  try {
+    const privateKey = process.env.TOKEN_PRIVATE;
+    return jwt.sign(payload, privateKey, {
+      algorithm: "RS256",
+      expiresIn,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 //verify JWT

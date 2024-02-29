@@ -16,7 +16,11 @@ exports.getLeagues = async (req, res, next) => {
 };
 
 exports.getLeaguesByUserId = async (req, res, next) => {
-  const { userId } = req.params;
+  const { userId } = req.user;
+
+  if (!userId) {
+    res.status(401).send({ msg: "user does not exist" });
+  }
 
   try {
     const allUserIds = await fetchUserIds();
