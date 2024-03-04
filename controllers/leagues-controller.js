@@ -32,9 +32,7 @@ exports.getLeaguesByUserId = async (req, res, next) => {
     }
     const leaguesByUserId = await fetchLeaguesByUserId(userId);
     if (leaguesByUserId.length === 0) {
-      return res
-        .status(200)
-        .send({ userId: userId, msg: "user is not in any leagues" });
+      return res.status(200).send({ msg: "user is not in any leagues" });
     }
     res.status(200).send({ leaguesByUserId });
   } catch (err) {
