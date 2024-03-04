@@ -29,10 +29,14 @@ exports.getLeaguesByUserId = async (req, res, next) => {
     );
     if (!isNaN(Number(userId)) && !user_exists) {
       res.status(404).send({ msg: "user does not exist" });
-    } else {
-      const leaguesByUserId = await fetchLeaguesByUserId(userId);
-      res.status(200).send({ leaguesByUserId });
     }
+    const leaguesByUserId = await fetchLeaguesByUserId(userId);
+    if (leaguesByUserId.length === 0) {
+      return res
+        .status(200)
+        .send({ userId: userId, msg: "user is not in any leagues" });
+    }
+    res.status(200).send({ leaguesByUserId });
   } catch (err) {
     next(err);
   }
