@@ -9,7 +9,7 @@ const generateAccessToken = (userId) => {
   switch (userId) {
     case 1:
       payload = {
-        userId: 1,
+        user_id: 1,
         username: "billy",
         name: "billy white",
         email: "testemail@gmail.com",
@@ -19,7 +19,7 @@ const generateAccessToken = (userId) => {
       break;
     case 2:
       payload = {
-        userId: 2,
+        user_id: 2,
         username: "ed",
         name: "ed hollis",
         email: "edtest@gmail.com",
@@ -29,7 +29,7 @@ const generateAccessToken = (userId) => {
       break;
     case 3:
       payload = {
-        userId: 3,
+        user_id: 3,
         username: "alice",
         name: "Alice Johnson",
         email: "alice@gmail.com",
@@ -39,7 +39,7 @@ const generateAccessToken = (userId) => {
       break;
     case 4:
       payload = {
-        userId: 4,
+        user_id: 4,
         username: "john",
         name: "John Smith",
         email: "john@gmail.com",
@@ -49,7 +49,7 @@ const generateAccessToken = (userId) => {
       break;
     case 5:
       payload = {
-        userId: 5,
+        user_id: 5,
         username: "peter",
         name: "peter schmeichel",
         email: "peter@gmail.com",
@@ -60,7 +60,7 @@ const generateAccessToken = (userId) => {
       break;
     default:
       payload = {
-        userId: userId,
+        user_id: userId,
         username: "",
         name: "",
         email: "",
