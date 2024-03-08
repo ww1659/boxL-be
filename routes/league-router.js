@@ -9,7 +9,9 @@ const { deserialiseUser } = require("../JWTmiddleware/deserialiseUser");
 
 leagueRouter.route("/").get(getLeagues);
 leagueRouter.route("/users/:userId").get(deserialiseUser, getLeaguesByUserId);
-leagueRouter.route("/:leagueId").get(getLeagueByLeagueId);
-leagueRouter.route("/:leagueId/standings").get(getStandingsByLeagueId);
+leagueRouter.route("/:leagueId").get(deserialiseUser, getLeagueByLeagueId);
+leagueRouter
+  .route("/:leagueId/standings")
+  .get(deserialiseUser, getStandingsByLeagueId);
 
 module.exports = leagueRouter;

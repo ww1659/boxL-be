@@ -8,6 +8,12 @@ const { fetchUserIds } = require("../models/users-model");
 
 exports.getResultsByLeagueId = async (req, res, next) => {
   const { leagueId } = req.params;
+  const userId = req.user.user_id;
+
+  if (!userId) {
+    res.status(401).send({ msg: "user does not exist" });
+  }
+
   try {
     const allLeagues = await fetchLeagues();
     const league_exists = allLeagues.some(
@@ -25,7 +31,12 @@ exports.getResultsByLeagueId = async (req, res, next) => {
 };
 
 exports.getResultsByUserId = async (req, res, next) => {
-  const { userId } = req.params;
+  const userId = req.user.user_id;
+
+  if (!userId) {
+    res.status(401).send({ msg: "user does not exist" });
+  }
+
   try {
     const allUserIds = await fetchUserIds();
     const user_exists = allUserIds.some(
@@ -43,6 +54,12 @@ exports.getResultsByUserId = async (req, res, next) => {
 };
 
 exports.postNewResult = async (req, res, next) => {
+  const userId = req.user.user_id;
+
+  if (!userId) {
+    res.status(401).send({ msg: "user does not exist" });
+  }
+
   try {
     const newResult = req.body;
     const enteredResult = await enterResult(newResult);

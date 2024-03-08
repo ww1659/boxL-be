@@ -42,6 +42,11 @@ exports.getLeaguesByUserId = async (req, res, next) => {
 
 exports.getLeagueByLeagueId = async (req, res, next) => {
   const { leagueId } = req.params;
+  const userId = req.user.user_id;
+
+  if (!userId) {
+    res.status(401).send({ msg: "user does not exist" });
+  }
 
   try {
     const leagueByLeagueId = await fetchLeagueByLeagueId(leagueId);
@@ -53,7 +58,11 @@ exports.getLeagueByLeagueId = async (req, res, next) => {
 
 exports.getStandingsByLeagueId = async (req, res, next) => {
   const { leagueId } = req.params;
+  const userId = req.user.user_id;
 
+  if (!userId) {
+    res.status(401).send({ msg: "user does not exist" });
+  }
   try {
     const standings = await fetchStandingsByLeagueId(leagueId);
     console.log(standings);

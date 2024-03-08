@@ -1,4 +1,5 @@
 const userRouter = require("express").Router();
+const { deserialiseUser } = require("../JWTmiddleware/deserialiseUser");
 const {
   createNewUser,
   getUsersByLeagueId,
@@ -9,6 +10,6 @@ const {
 userRouter.route("/").post(createNewUser);
 userRouter.route("/:userId").get(getUserById);
 userRouter.route("/login").post(createUserSession);
-userRouter.route("/leagues/:leagueId").get(getUsersByLeagueId);
+userRouter.route("/leagues/:leagueId").get(deserialiseUser, getUsersByLeagueId);
 
 module.exports = userRouter;

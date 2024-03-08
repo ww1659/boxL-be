@@ -20,7 +20,6 @@ exports.deserialiseUser = (req, res, next) => {
           .send({ msg: "access denied: token has expired." });
       }
       req.user = verification.payload;
-      console.log(req.user);
       next();
     } else {
       return res.status(403).send({ msg: "invalid token." });

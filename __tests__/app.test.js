@@ -122,7 +122,7 @@ describe("GET api/users/:userId", () => {
   });
 });
 
-// JWT VERIFICATION BOOM
+// JWT VERIFIED
 describe("GET api/leagues/users/:userId", () => {
   test("GET:200 returns a single league for a desired user id", async () => {
     const accessToken = generateAccessToken(1);
@@ -183,9 +183,14 @@ describe("GET api/leagues/users/:userId", () => {
   });
 });
 
+// JWT VERIFIED
 describe("GET api/leagues/:leagueId", () => {
   test("GET:200 returns a single league for a desired league id", async () => {
-    const response = await request(app).get("/api/leagues/1").expect(200);
+    const accessToken = generateAccessToken(1);
+    const response = await request(app)
+      .get("/api/leagues/1")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(200);
     const league = response.body.league;
     expect(league[0]).toMatchObject({
       name: "CSL",
@@ -197,19 +202,32 @@ describe("GET api/leagues/:leagueId", () => {
     });
   });
   test("GET:404 returns status 404 for a non-existent league", async () => {
-    const response = await request(app).get("/api/leagues/6").expect(404);
+    const accessToken = generateAccessToken(1);
+
+    const response = await request(app)
+      .get("/api/leagues/6")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(404);
     expect(response.body).toEqual({ msg: "league does not exist" });
   });
   test("GET:400 returns status 400 for a invalid user id", async () => {
-    const response = await request(app).get("/api/leagues/test").expect(400);
+    const accessToken = generateAccessToken(1);
+
+    const response = await request(app)
+      .get("/api/leagues/test")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(400);
     expect(response.body).toEqual({ msg: "invalid id" });
   });
 });
 
+// JWT VERIFIED
 describe("GET api/results/leagues/:leagueId", () => {
   test("GET:200 returns an array of results for a desired league", async () => {
+    const accessToken = generateAccessToken(1);
     const response = await request(app)
       .get("/api/results/leagues/1")
+      .set("Authorization", `Bearer ${accessToken}`)
       .expect(200);
     const results = response.body.resultsByLeagueId;
     expect(results.length).toBe(7);
@@ -235,28 +253,48 @@ describe("GET api/results/leagues/:leagueId", () => {
     });
   });
   test("GET:404 returns status 404 for a non-existent league", async () => {
+    const accessToken = generateAccessToken(1);
     const response = await request(app)
       .get("/api/results/leagues/4")
+      .set("Authorization", `Bearer ${accessToken}`)
       .expect(404);
     expect(response.body).toEqual({ msg: "league does not exist" });
   });
   test("GET:404 returns status 404 when there are no results for a league", async () => {
+    const accessToken = generateAccessToken(1);
+
     const response = await request(app)
       .get("/api/results/leagues/3")
+      .set("Authorization", `Bearer ${accessToken}`)
       .expect(404);
     expect(response.body).toEqual({ msg: "no results for this league" });
   });
   test("GET:400 returns status 400 for a invalid league id", async () => {
+    const accessToken = generateAccessToken(1);
     const response = await request(app)
       .get("/api/results/leagues/hello")
+      .set("Authorization", `Bearer ${accessToken}`)
       .expect(400);
     expect(response.body).toEqual({ msg: "invalid id" });
   });
+  test("GET:403 returns status 403 for a invalid access token", async () => {
+    const accessToken = "not a real access token";
+    const response = await request(app)
+      .get("/api/results/leagues/hello")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(403);
+    expect(response.body).toEqual({ msg: "invalid token" });
+  });
 });
 
+//JWT VERIFIED
 describe("GET api/results/users/:userId", () => {
   test("GET:200 returns an array of results for a desired user", async () => {
-    const response = await request(app).get("/api/results/users/1").expect(200);
+    const accessToken = generateAccessToken(1);
+    const response = await request(app)
+      .get("/api/results/users/1")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(200);
     const results = response.body.resultsByUserId;
     expect(results.length).toBe(3);
     results.forEach((result) => {
@@ -280,24 +318,47 @@ describe("GET api/results/users/:userId", () => {
     });
   });
   test("GET:404 returns status 404 for no results for a user", async () => {
-    const response = await request(app).get("/api/results/users/5").expect(404);
+    const accessToken = generateAccessToken(5);
+    const response = await request(app)
+      .get("/api/results/users/5")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(404);
     expect(response.body).toEqual({ msg: "no results for this user" });
   });
   test("GET:404 returns status 404 for a non-existent user", async () => {
-    const response = await request(app).get("/api/results/users/7").expect(404);
+    const accessToken = generateAccessToken(7);
+    const response = await request(app)
+      .get("/api/results/users/7")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(404);
     expect(response.body).toEqual({ msg: "user does not exist" });
   });
   test("GET:400 returns status 400 for a invalid user id", async () => {
+    const accessToken = generateAccessToken("hello");
     const response = await request(app)
       .get("/api/results/users/hello")
+      .set("Authorization", `Bearer ${accessToken}`)
       .expect(400);
     expect(response.body).toEqual({ msg: "invalid id" });
   });
+  test("GET:403 returns status 403 for an invalid token", async () => {
+    const accessToken = "bonjour!";
+    const response = await request(app)
+      .get("/api/results/users/hello")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(403);
+    expect(response.body).toEqual({ msg: "invalid token" });
+  });
 });
 
+//JWT VERIFIED
 describe("GET api/clubs/:clubId", () => {
+  const accessToken = generateAccessToken(1);
   test("GET:200 returns a single club for a desired club id", async () => {
-    const response = await request(app).get("/api/clubs/1").expect(200);
+    const response = await request(app)
+      .get("/api/clubs/1")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(200);
     const club = response.body.club;
     expect(club[0]).toMatchObject({
       name: "Cotham Park Tennis Club",
@@ -315,21 +376,38 @@ describe("GET api/clubs/:clubId", () => {
         "https://unsplash.com/photos/brown-wooden-surface-with-net-T7RHJ3c6s7Q",
     });
   });
-
   test("GET:200 returns message when user exists but is not a member of a league", async () => {
-    const response = await request(app).get("/api/clubs/5").expect(200);
+    const response = await request(app)
+      .get("/api/clubs/5")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(200);
     expect(response.body).toEqual({ msg: "club does not exist" });
   });
-
   test("GET:400 returns status 400 for a invalid user id", async () => {
-    const response = await request(app).get("/api/clubs/test").expect(400);
+    const response = await request(app)
+      .get("/api/clubs/test")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(400);
     expect(response.body).toEqual({ msg: "invalid id" });
+  });
+  test("GET:403 returns status 403 for a invalid token", async () => {
+    const testToken = "not going to work";
+    const response = await request(app)
+      .get("/api/clubs/test")
+      .set("Authorization", `Bearer ${testToken}`)
+      .expect(403);
+    expect(response.body).toEqual({ msg: "invalid token" });
   });
 });
 
+//JWT VERIFIED
 describe("GET api/users/leagues/:leagueid", () => {
+  const accessToken = generateAccessToken(1);
   test("GET:200 returns array of users for a specific league id", async () => {
-    const response = await request(app).get("/api/users/leagues/1").expect(200);
+    const response = await request(app)
+      .get("/api/users/leagues/1")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(200);
     const users = response.body.users;
     console.log(users);
     expect(users.length).toBe(4);
@@ -342,21 +420,34 @@ describe("GET api/users/leagues/:leagueid", () => {
     });
   });
   test("GET:404 returns status 404 and message for a non-existent league id", async () => {
-    const response = await request(app).get("/api/users/leagues/7").expect(404);
+    const response = await request(app)
+      .get("/api/users/leagues/7")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .expect(404);
     expect(response.body).toEqual({ msg: "league does not exist" });
   });
   test("GET:400 returns status 400 for an invalid id", async () => {
     const response = await request(app)
       .get("/api/users/leagues/oops")
+      .set("Authorization", `Bearer ${accessToken}`)
       .expect(400);
     expect(response.body).toEqual({ msg: "invalid id" });
   });
+  test("GET:401 returns status 401 for an invalid token", async () => {
+    const response = await request(app)
+      .get("/api/users/leagues/oops")
+      .expect(401);
+    expect(response.body).toEqual({ msg: "access denied: no token provided." });
+  });
 });
 
+//JWT VERIFIED
 describe("GET api/leagues/:leagueId/standings", () => {
+  const accessToken = generateAccessToken(1);
   test("GET:200 returns an array of standings for a desired league id", async () => {
     const response = await request(app)
       .get("/api/leagues/1/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .expect(200);
     const standings = response.body.standings;
     expect(standings.length).toBe(4);
@@ -377,14 +468,22 @@ describe("GET api/leagues/:leagueId/standings", () => {
   test("GET:404 returns status 404 for a non-existent league", async () => {
     const response = await request(app)
       .get("/api/leagues/6/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .expect(404);
     expect(response.body).toEqual({ msg: "league does not exist" });
   });
   test("GET:400 returns status 400 for a invalid user id", async () => {
     const response = await request(app)
       .get("/api/leagues/test/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .expect(400);
     expect(response.body).toEqual({ msg: "invalid id" });
+  });
+  test("GET:401 returns status 401 for an invalid access token", async () => {
+    const response = await request(app)
+      .get("/api/leagues/test/standings")
+      .expect(401);
+    expect(response.body).toEqual({ msg: "access denied: no token provided." });
   });
 });
 
@@ -447,8 +546,10 @@ describe("POST api/users", () => {
   });
 });
 
+//JWT VERIFIED
 describe("POST api/results", () => {
   test("POST:201 returns status 201 for a successfully entered result", async () => {
+    const accessToken = generateAccessToken(1);
     const testResult = {
       league_id: 1,
       winner_id: 1,
@@ -470,6 +571,7 @@ describe("POST api/results", () => {
     };
     const response = await request(app)
       .post("/api/results")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send(testResult)
       .expect(201);
     expect(response.body.result).toEqual({
@@ -495,6 +597,32 @@ describe("POST api/results", () => {
     expect(response.body.msg).toBe("new result entered");
   });
   test("POST:400 returns status 400 and msg for result without a necessary value", async () => {
+    const accessToken = generateAccessToken(1);
+    const testResult = {
+      league_id: 1,
+      loser_id: 2,
+      first_set_score: "7-5",
+      first_set_tiebreak: "",
+      second_set_score: "6-7",
+      second_set_tiebreak: "7-9",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: 1,
+      championship_tiebreak_score: "10-1",
+      match_date: "2024-02-27",
+      location: "cotham park tennis club",
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "test result to be entered",
+    };
+    const response = await request(app)
+      .post("/api/results")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .send(testResult)
+      .expect(400);
+    expect(response.body.msg).toBe("missing results data");
+  });
+  test("POST:401 returns status 401 and msg for posting without access token", async () => {
     const testResult = {
       league_id: 1,
       loser_id: 2,
@@ -515,8 +643,8 @@ describe("POST api/results", () => {
     const response = await request(app)
       .post("/api/results")
       .send(testResult)
-      .expect(400);
-    expect(response.body.msg).toBe("missing results data");
+      .expect(401);
+    expect(response.body.msg).toBe("access denied: no token provided.");
   });
 });
 
@@ -567,7 +695,9 @@ describe("POST api/users/login", () => {
 });
 
 //PATCH TESTS
+//JWT VERIFIED
 describe("PATCH api/standings", () => {
+  const accessToken = generateAccessToken(1);
   test("PATCH:200 updates the standings table when a result is entered", async () => {
     const testResult = {
       league_id: 1,
@@ -590,7 +720,9 @@ describe("PATCH api/standings", () => {
     };
     const response = await request(app)
       .patch("/api/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send(testResult)
+
       .expect(200);
     expect(response.body.msg).toBe("standings updated successfully");
     expect(response.body.updatedStandings).toMatchObject([
@@ -642,6 +774,7 @@ describe("PATCH api/standings", () => {
     };
     const response = await request(app)
       .patch("/api/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send(testResult)
       .expect(200);
     expect(response.body.msg).toBe("standings updated successfully");
@@ -694,6 +827,7 @@ describe("PATCH api/standings", () => {
     };
     const response = await request(app)
       .patch("/api/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send(testResult)
       .expect(200);
     expect(response.body.msg).toBe("standings updated successfully");
@@ -746,6 +880,7 @@ describe("PATCH api/standings", () => {
     };
     const response = await request(app)
       .patch("/api/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send(testResult)
       .expect(400);
     expect(response.body.msg).toBe("first set score invalid");
@@ -772,6 +907,7 @@ describe("PATCH api/standings", () => {
     };
     const response = await request(app)
       .patch("/api/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send(testResult)
       .expect(400);
     expect(response.body.msg).toBe("second set score invalid");
@@ -798,6 +934,7 @@ describe("PATCH api/standings", () => {
     };
     const response = await request(app)
       .patch("/api/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send(testResult)
       .expect(400);
     expect(response.body.msg).toBe("third set score invalid");
@@ -824,6 +961,7 @@ describe("PATCH api/standings", () => {
     };
     const response = await request(app)
       .patch("/api/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send(testResult)
       .expect(400);
     expect(response.body.msg).toBe("champs tiebreak score invalid");
@@ -850,6 +988,7 @@ describe("PATCH api/standings", () => {
     };
     const response = await request(app)
       .patch("/api/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send(testResult)
       .expect(400);
     expect(response.body.msg).toBe("invalid id");
@@ -876,6 +1015,7 @@ describe("PATCH api/standings", () => {
     };
     const response = await request(app)
       .patch("/api/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send(testResult)
       .expect(400);
     expect(response.body.msg).toBe("missing standings data");
@@ -901,8 +1041,36 @@ describe("PATCH api/standings", () => {
     };
     const response = await request(app)
       .patch("/api/standings")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send(testResult)
       .expect(400);
     expect(response.body.msg).toBe("missing standings data");
+  });
+  test("PATCH:403 returns status 403 and msg for an invalid access token", async () => {
+    const testAccessToken = "this will not pass the access token test";
+    const testResult = {
+      winner_id: 1,
+      loser_id: 2,
+      group_name: "A",
+      first_set_score: "6-0",
+      first_set_tiebreak: "",
+      second_set_score: "6-0",
+      second_set_tiebreak: "",
+      third_set_score: "",
+      third_set_tiebreak: "",
+      championship_tiebreak: 0,
+      championship_tiebreak_score: "",
+      match_date: "2024-03-29",
+      club_id: 1,
+      court_number: 3,
+      court_surface: "articifical clay",
+      match_notes: "This is a test result for a patch. Double Bagel btw",
+    };
+    const response = await request(app)
+      .patch("/api/standings")
+      .set("Authorization", `Bearer ${testAccessToken}`)
+      .send(testResult)
+      .expect(403);
+    expect(response.body.msg).toBe("invalid token");
   });
 });
