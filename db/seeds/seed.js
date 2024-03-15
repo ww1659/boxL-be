@@ -62,7 +62,8 @@ const seed = ({
             start_date DATE,
             end_date DATE,
             club_id INT REFERENCES clubs(club_id) NOT NULL,
-            format VARCHAR NOT NULL
+            format VARCHAR NOT NULL,
+            type VARCHAR NOT NULL
         );`);
     })
     .then(() => {
@@ -156,15 +157,16 @@ const seed = ({
     })
     .then(() => {
       const insertLeaguesQueryStr = format(
-        `INSERT INTO leagues (name, admin, start_date, end_date, club_id, format) VALUES %L;`,
+        `INSERT INTO leagues (name, admin, start_date, end_date, club_id, format, type) VALUES %L;`,
         leagueData.map(
-          ({ name, admin, start_date, end_date, club_id, format }) => [
+          ({ name, admin, start_date, end_date, club_id, format, type }) => [
             name,
             admin,
             start_date,
             end_date,
             club_id,
             format,
+            type,
           ]
         )
       );

@@ -6,6 +6,7 @@ module.exports = [
     end_date: "2024-01-15",
     club_id: 1,
     format: "round robin",
+    type: "singles",
   },
   {
     name: "Friendly League",
@@ -14,6 +15,7 @@ module.exports = [
     end_date: "2024-01-11",
     club_id: 1,
     format: "single elimination",
+    type: "doubles",
   },
   {
     name: "Leaguue with no results",
@@ -22,5 +24,6 @@ module.exports = [
     end_date: "2024-01-31",
     club_id: 1,
     format: "whatever!",
+    type: "hybrid",
   },
 ];

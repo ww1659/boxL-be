@@ -92,6 +92,7 @@ describe("GET api/leagues", () => {
       expect(typeof league.end_date).toBe("string");
       expect(typeof league.club_id).toBe("number");
       expect(typeof league.format).toBe("string");
+      expect(typeof league.type).toBe("string");
     });
   });
   test("GET:404 returns status 404 for a non-existent path", async () => {
@@ -138,6 +139,7 @@ describe("GET api/leagues/users/:userId", () => {
       end_date: expect.any(String),
       club_id: 1,
       format: "round robin",
+      type: "singles",
     });
   });
   test("GET:200 returns an array of leagues for a desired user id", async () => {

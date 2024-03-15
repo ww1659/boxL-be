@@ -6,6 +6,7 @@ module.exports = [
     end_date: "2024-03-15",
     club_id: 1,
     format: "round_robin_knockout",
+    type: "singles",
   },
   {
     name: "Spring Box League",
@@ -14,5 +15,6 @@ module.exports = [
     end_date: "2024-03-15",
     club_id: 1,
     format: "round_robin_knockout",
+    type: "singles",
   },
 ];
