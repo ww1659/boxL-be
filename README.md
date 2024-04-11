@@ -7,9 +7,8 @@ A list of available endpoints is below.
 ## Table of Contents
 
 - [Features](#features)
-- [Getting Started](#getting-started)
 - [Prerequisites](#prerequisites)
-- [Installation](#installation)
+- [Dependencies](#dependencies)
 - [API Endpoints](#api-endpoints)
 
 ## Features
@@ -41,6 +40,7 @@ Make sure the following dependencies are installed:
 ```bash
 npm install bcrypt cors dotenv express jsonwebtoken pg pg-format supertest
 ```
+
 ## API Endpoints
 
 The following endpoints are currently active and require JWT verification to access. The can be found at https://boxl-api.onrender.com/api. 
