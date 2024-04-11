@@ -16,6 +16,8 @@ A list of available endpoints is below.
 - Provides endpoints for managing box league data.
 - Implements user authentication with JWT verification (only access token, not refresh).
 - Includes rigorous end-to-end testing suite with Jest.
+- Middleware for controlling the flow of data.
+- Error handling to provide meaningful responses to the client.
 
 ## Prerequisites
 
